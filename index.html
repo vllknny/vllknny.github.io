@@ -23,7 +23,6 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -35,7 +34,6 @@
       overflow-x: hidden;
     }
 
-    /* ── NOISE OVERLAY ── */
     body::before {
       content: '';
       position: fixed;
@@ -46,7 +44,6 @@
       opacity: 0.5;
     }
 
-    /* ── GRID BACKGROUND ── */
     body::after {
       content: '';
       position: fixed;
@@ -81,12 +78,9 @@
       letter-spacing: -0.02em;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
+    .nav-right { display: flex; align-items: center; gap: 32px; }
 
+    .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-links a {
       color: var(--text-dim);
       text-decoration: none;
@@ -96,6 +90,20 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--accent); }
+
+    #owner-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #owner-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #owner-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.06); }
 
     /* ── HERO ── */
     .hero {
@@ -107,9 +115,7 @@
       padding: 120px 48px 80px;
     }
 
-    .hero-inner {
-      max-width: 900px;
-    }
+    .hero-inner { max-width: 900px; }
 
     .hero-tag {
       display: inline-block;
@@ -135,13 +141,9 @@
       opacity: 0;
       animation: fadeUp 0.7s ease forwards 0.35s;
     }
-
-    .hero-name span {
-      color: var(--accent);
-    }
+    .hero-name span { color: var(--accent); }
 
     .hero-handle {
-      font-family: var(--font-mono);
       font-size: 16px;
       color: var(--text-dim);
       margin-bottom: 40px;
@@ -158,7 +160,6 @@
       opacity: 0;
       animation: fadeUp 0.7s ease forwards 0.65s;
     }
-
     .hero-bio strong { color: var(--text); font-weight: 500; }
 
     .hero-links {
@@ -182,29 +183,12 @@
       cursor: pointer;
       border: none;
     }
+    .btn-primary { background: var(--accent); color: #080a0e; font-weight: 500; }
+    .btn-primary:hover { background: #d4f472; transform: translateY(-2px); }
+    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #080a0e;
-      font-weight: 500;
-    }
-    .btn-primary:hover {
-      background: #d4f472;
-      transform: translateY(-2px);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* ── WAVEFORM DECORATION ── */
+    /* ── WAVEFORM ── */
     .waveform {
       position: absolute;
       right: 48px;
@@ -216,20 +200,18 @@
       height: 200px;
       opacity: 0.15;
     }
-
     .waveform-bar {
       width: 3px;
       background: var(--accent);
       border-radius: 2px;
       animation: wave 1.2s ease-in-out infinite;
     }
-
     @keyframes wave {
       0%, 100% { transform: scaleY(0.3); }
       50% { transform: scaleY(1); }
     }
 
-    /* ── SECTION BASE ── */
+    /* ── SECTIONS ── */
     section {
       position: relative;
       z-index: 1;
@@ -248,7 +230,6 @@
       align-items: center;
       gap: 12px;
     }
-
     .section-label::after {
       content: '';
       flex: 1;
@@ -281,13 +262,11 @@
       background: var(--card);
       padding: 32px;
       transition: background 0.2s;
-      cursor: pointer;
       text-decoration: none;
       color: inherit;
       display: block;
     }
     .project-card:hover { background: #161e2a; }
-
     .project-card:hover .project-arrow { transform: translate(3px, -3px); }
 
     .project-header {
@@ -308,32 +287,10 @@
       color: var(--accent);
     }
 
-    .project-arrow {
-      font-size: 18px;
-      color: var(--muted);
-      transition: transform 0.2s;
-    }
-
-    .project-name {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-
-    .project-desc {
-      font-size: 13px;
-      color: var(--text-dim);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .project-arrow { font-size: 18px; color: var(--muted); transition: transform 0.2s; }
+    .project-name { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .project-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 24px; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .tag {
       font-size: 10px;
@@ -343,18 +300,13 @@
       border: 1px solid var(--border);
       color: var(--text-dim);
     }
+    .tag-accent { border-color: rgba(200,240,96,0.3); color: var(--accent); }
 
-    .tag-accent {
-      border-color: rgba(200,240,96,0.3);
-      color: var(--accent);
-    }
-
-    /* ADD PROJECT CARD */
+    /* ADD CARD — shown only in owner mode */
     .project-card-add {
       background: var(--card);
       padding: 32px;
       border: 2px dashed var(--border);
-      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -363,27 +315,14 @@
       cursor: pointer;
       transition: all 0.2s;
       min-height: 220px;
+      display: none; /* hidden by default */
     }
-
-    .project-card-add:hover {
-      border-color: var(--accent);
-      background: #161e2a;
-    }
-
+    .project-card-add:hover { border-color: var(--accent); background: #161e2a; }
     .project-card-add:hover .add-icon { color: var(--accent); }
+    .add-icon { font-size: 28px; color: var(--muted); transition: color 0.2s; }
+    .add-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
 
-    .add-icon {
-      font-size: 28px;
-      color: var(--muted);
-      transition: color 0.2s;
-    }
-
-    .add-label {
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-    }
+    body.owner-mode .project-card-add { display: flex; }
 
     /* ── SKILLS ── */
     #skills { border-top: 1px solid var(--border); }
@@ -395,33 +334,13 @@
       background: var(--border);
     }
 
-    .skill-cell {
-      background: var(--card);
-      padding: 24px;
-    }
-
-    .skill-category {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .skill-list {
-      list-style: none;
-    }
-
-    .skill-list li {
-      font-size: 13px;
-      color: var(--text-dim);
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(30,37,53,0.5);
-    }
-
+    .skill-cell { background: var(--card); padding: 24px; }
+    .skill-category { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .skill-list { list-style: none; }
+    .skill-list li { font-size: 13px; color: var(--text-dim); padding: 4px 0; border-bottom: 1px solid rgba(30,37,53,0.5); }
     .skill-list li:last-child { border-bottom: none; }
 
-    /* ── ABOUT ── */
+    /* ── ABOUT + RESUME ── */
     #about {
       border-top: 1px solid var(--border);
       display: grid;
@@ -432,51 +351,121 @@
       margin: 0 auto;
     }
 
-    .about-text p {
-      font-size: 14px;
-      color: var(--text-dim);
-      line-height: 1.9;
-      margin-bottom: 16px;
-    }
-
+    .about-text p { font-size: 14px; color: var(--text-dim); line-height: 1.9; margin-bottom: 16px; }
     .about-text p strong { color: var(--accent); font-weight: 400; }
 
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* ── RESUME PANEL ── */
+    .resume-panel { display: flex; flex-direction: column; gap: 0; }
+
+    /* Upload zone — toggled visible in owner mode */
+    .resume-upload-wrap {
+      display: none;
+      flex-direction: column;
       gap: 1px;
-      background: var(--border);
-      align-self: start;
+      margin-bottom: 1px;
     }
+    body.owner-mode .resume-upload-wrap { display: flex; }
 
-    .stat-box {
+    .resume-upload-zone {
+      border: 2px dashed var(--border);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
       background: var(--card);
-      padding: 28px;
+      position: relative;
     }
+    .resume-upload-zone:hover { border-color: var(--accent); }
+    .resume-upload-zone.dragging { border-color: var(--accent); background: rgba(200,240,96,0.04); }
 
-    .stat-number {
-      font-family: var(--font-display);
-      font-size: 40px;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 6px;
+    #resume-file-input { display: none; }
+
+    .upload-icon { font-size: 20px; margin-bottom: 6px; color: var(--muted); }
+    .upload-text { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+    .upload-text strong { color: var(--accent); font-weight: 400; }
+    #upload-filename { margin-top: 8px; font-size: 11px; color: var(--accent); min-height: 16px; }
+
+    .resume-parse-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      border: none;
+      color: #080a0e;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
     }
+    .resume-parse-btn:hover { background: #d4f472; }
+    .resume-parse-btn:disabled { opacity: 0.45; cursor: not-allowed; background: var(--accent); }
 
-    .stat-label {
+    .resume-status {
       font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
       color: var(--text-dim);
+      padding: 6px 0;
+      letter-spacing: 0.08em;
+      min-height: 22px;
     }
+    .resume-status.loading { color: var(--accent2); }
+    .resume-status.error { color: #f06060; }
+    .resume-status.success { color: var(--accent); }
+
+    /* Resume display */
+    .resume-content { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+    .resume-block { background: var(--card); padding: 22px 24px; }
+    .resume-block-title {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .resume-entries { display: flex; flex-direction: column; gap: 16px; }
+    .resume-entry-org { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .resume-entry-meta { font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; margin-bottom: 4px; }
+    .resume-entry-desc { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
+
+    .resume-skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .resume-skill-tag {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      background: var(--bg);
+    }
+
+    .resume-empty {
+      background: var(--card);
+      padding: 36px 24px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .resume-clear-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .resume-clear-btn:hover { color: #f06060; border-color: #f06060; }
+    body.owner-mode .resume-clear-btn { display: block; }
 
     /* ── CONTACT ── */
-    #contact {
-      border-top: 1px solid var(--border);
-      text-align: center;
-      padding: 100px 48px;
-    }
-
+    #contact { border-top: 1px solid var(--border); text-align: center; padding: 100px 48px; }
     #contact .section-label { justify-content: center; }
     #contact .section-label::after { display: none; }
 
@@ -489,21 +478,9 @@
       line-height: 1;
       margin-bottom: 24px;
     }
-
     .contact-heading span { color: var(--accent); }
-
-    .contact-sub {
-      font-size: 14px;
-      color: var(--text-dim);
-      margin-bottom: 48px;
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .contact-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 48px; }
+    .contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
 
     /* ── FOOTER ── */
     footer {
@@ -517,11 +494,10 @@
       font-size: 11px;
       color: var(--muted);
     }
-
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--accent); }
 
-    /* ── MODAL ── */
+    /* ── MODALS ── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -535,11 +511,7 @@
       pointer-events: none;
       transition: opacity 0.25s;
     }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
 
     .modal {
       background: var(--surface);
@@ -551,29 +523,13 @@
       transform: translateY(20px);
       transition: transform 0.25s;
     }
-
     .modal-overlay.active .modal { transform: translateY(0); }
 
-    .modal-title {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 24px;
-      color: var(--text);
-    }
+    .modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .modal-subtitle { font-size: 12px; color: var(--text-dim); margin-bottom: 28px; line-height: 1.6; }
 
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 
     .form-input, .form-textarea {
       width: 100%;
@@ -586,19 +542,10 @@
       outline: none;
       transition: border-color 0.2s;
     }
-
-    .form-input:focus, .form-textarea:focus {
-      border-color: var(--accent);
-    }
-
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
     .form-textarea { resize: vertical; min-height: 100px; }
 
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
     .btn-cancel {
       background: transparent;
       border: 1px solid var(--border);
@@ -610,7 +557,6 @@
       transition: all 0.2s;
     }
     .btn-cancel:hover { border-color: var(--muted); }
-
     .btn-submit {
       background: var(--accent);
       border: none;
@@ -630,15 +576,9 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
+    .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
@@ -656,12 +596,15 @@
   <!-- NAV -->
   <nav>
     <div class="nav-logo">vllknny</div>
-    <ul class="nav-links">
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button id="owner-btn" title="Owner login">⚿</button>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -681,8 +624,6 @@
         <a class="btn btn-ghost" href="https://linkedin.com/in/vllknny" target="_blank">LinkedIn ↗</a>
       </div>
     </div>
-
-    <!-- WAVEFORM DECO -->
     <div class="waveform" id="waveform"></div>
   </div>
 
@@ -692,17 +633,13 @@
     <h2 class="section-title">Projects</h2>
 
     <div class="projects-grid" id="projects-grid">
-
-      <!-- AQgen -->
       <a class="project-card" href="https://github.com/vllknny/AQgen" target="_blank">
         <div class="project-header">
           <div class="project-icon">⚡</div>
           <span class="project-arrow">↗</span>
         </div>
         <div class="project-name">AQgen</div>
-        <p class="project-desc">
-          Auto-question generation tool. Leverages AI to intelligently create questions from input content — useful for study aids, quiz platforms, and content review pipelines.
-        </p>
+        <p class="project-desc">Auto-question generation tool. Leverages AI to intelligently create questions from input content — useful for study aids, quiz platforms, and content review pipelines.</p>
         <div class="project-tags">
           <span class="tag tag-accent">Pinned</span>
           <span class="tag">JavaScript</span>
@@ -710,16 +647,13 @@
         </div>
       </a>
 
-      <!-- ssampler -->
       <a class="project-card" href="https://github.com/vllknny/ssampler" target="_blank">
         <div class="project-header">
           <div class="project-icon">🎚</div>
           <span class="project-arrow">↗</span>
         </div>
         <div class="project-name">ssampler</div>
-        <p class="project-desc">
-          Stem-splitting sampler powered by <strong style="color:var(--text)">Demucs</strong> and built with JUCE &amp; C++. Separates audio into stems in real-time for live sampling and creative resampling workflows.
-        </p>
+        <p class="project-desc">Stem-splitting sampler powered by <strong style="color:var(--text)">Demucs</strong> and built with JUCE &amp; C++. Separates audio into stems in real-time for live sampling and creative resampling workflows.</p>
         <div class="project-tags">
           <span class="tag tag-accent">Pinned</span>
           <span class="tag">C++</span>
@@ -729,15 +663,12 @@
         </div>
       </a>
 
-      <!-- Add project card -->
-      <div class="project-card-add" onclick="openModal()">
+      <!-- ADD PROJECT — owner mode only (CSS-controlled) -->
+      <div class="project-card-add" id="add-project-card" onclick="openAddModal()">
         <div class="add-icon">+</div>
         <div class="add-label">Add a project</div>
-        <div style="font-size:12px;color:var(--muted);max-width:180px;line-height:1.5;">
-          Pin another repo or custom project here
-        </div>
+        <div style="font-size:12px;color:var(--muted);max-width:180px;line-height:1.5;">Pin another repo or custom project</div>
       </div>
-
     </div>
   </section>
 
@@ -745,89 +676,70 @@
   <section id="skills" class="fade-in">
     <div class="section-label">Stack</div>
     <h2 class="section-title">Skills & Tools</h2>
-
     <div class="skills-grid">
       <div class="skill-cell">
         <div class="skill-category">Languages</div>
         <ul class="skill-list">
-          <li>Python</li>
-          <li>C / C++</li>
-          <li>JavaScript</li>
-          <li>Java</li>
-          <li>SQL</li>
+          <li>Python</li><li>C / C++</li><li>JavaScript</li><li>Java</li><li>SQL</li>
         </ul>
       </div>
       <div class="skill-cell">
         <div class="skill-category">Audio / DSP</div>
         <ul class="skill-list">
-          <li>JUCE Framework</li>
-          <li>Demucs (ML)</li>
-          <li>Audio Engineering</li>
-          <li>Signal Processing</li>
-          <li>Pro Tools / DAWs</li>
+          <li>JUCE Framework</li><li>Demucs (ML)</li><li>Audio Engineering</li><li>Signal Processing</li><li>Pro Tools / DAWs</li>
         </ul>
       </div>
       <div class="skill-cell">
         <div class="skill-category">Data / AI</div>
         <ul class="skill-list">
-          <li>Machine Learning</li>
-          <li>NLP</li>
-          <li>Data Analysis</li>
-          <li>PyTorch / NumPy</li>
+          <li>Machine Learning</li><li>NLP</li><li>Data Analysis</li><li>PyTorch / NumPy</li>
         </ul>
       </div>
       <div class="skill-cell">
         <div class="skill-category">Tools</div>
         <ul class="skill-list">
-          <li>Git / GitHub</li>
-          <li>Linux</li>
-          <li>VS Code</li>
-          <li>CMake</li>
+          <li>Git / GitHub</li><li>Linux</li><li>VS Code</li><li>CMake</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about" class="fade-in" style="padding: 80px 48px;">
+  <!-- ABOUT / RESUME -->
+  <section id="about" class="fade-in" style="padding:80px 48px;">
+    <!-- Left: bio -->
     <div>
       <div class="section-label">Background</div>
       <h2 class="section-title">About Me</h2>
       <div class="about-text">
-        <p>
-          I'm Kunal — a <strong>Computer & Data Science major at Penn State</strong>, also a
-          lifelong audio engineer who's been mixing, producing, and shaping sound since 2009.
-        </p>
-        <p>
-          My work lives at the crossroads of two worlds: the precision of software
-          engineering and the artistry of music production. I build tools that serve
-          both disciplines — from ML-driven question generators to real-time audio
-          stem splitters.
-        </p>
-        <p>
-          Based in <strong>Harrisburg, PA</strong>. Open to collaborations,
-          internships, and conversations about anything audio or code.
-        </p>
+        <p>I'm Kunal — a <strong>Computer & Data Science major at Penn State</strong>, also a lifelong audio engineer who's been mixing, producing, and shaping sound since 2009.</p>
+        <p>My work lives at the crossroads of two worlds: the precision of software engineering and the artistry of music production. I build tools that serve both disciplines — from ML-driven question generators to real-time audio stem splitters.</p>
+        <p>Based in <strong>Harrisburg, PA</strong>. Open to collaborations, internships, and conversations about anything audio or code.</p>
       </div>
     </div>
 
-    <div class="about-stats">
-      <div class="stat-box">
-        <div class="stat-number">17+</div>
-        <div class="stat-label">Years in Audio</div>
+    <!-- Right: resume panel -->
+    <div class="resume-panel">
+
+      <!-- Upload controls — owner mode only -->
+      <div class="resume-upload-wrap" id="resume-upload-wrap">
+        <div class="resume-upload-zone" id="upload-zone" onclick="document.getElementById('resume-file-input').click()">
+          <input type="file" id="resume-file-input" accept=".pdf,.doc,.docx,.txt" />
+          <div class="upload-icon">📄</div>
+          <div class="upload-text">
+            <strong>Drop resume here</strong> or click to browse<br/>
+            PDF, DOCX, or TXT — parsed by AI
+          </div>
+          <div id="upload-filename"></div>
+        </div>
+        <button class="resume-parse-btn" id="parse-btn" onclick="parseResume()" disabled>Parse Resume →</button>
+        <div class="resume-status" id="resume-status"></div>
       </div>
-      <div class="stat-box">
-        <div class="stat-number">12</div>
-        <div class="stat-label">GitHub Repos</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">C++</div>
-        <div class="stat-label">DSP stack</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">PSU</div>
-        <div class="stat-label">CS + Data Sci</div>
-      </div>
+
+      <!-- Resume display (all users see this once populated) -->
+      <div id="resume-content-area"></div>
+
+      <!-- Clear button — owner mode only -->
+      <button class="resume-clear-btn" id="resume-clear-btn" onclick="clearResume()">✕ Clear resume data</button>
     </div>
   </section>
 
@@ -849,11 +761,28 @@
     <span>Built for <a href="https://pages.github.com" target="_blank">GitHub Pages</a></span>
   </footer>
 
+  <!-- OWNER LOGIN MODAL -->
+  <div class="modal-overlay" id="login-modal">
+    <div class="modal" style="max-width:380px;">
+      <div class="modal-title">Owner Access</div>
+      <div class="modal-subtitle">Enter your password to unlock editing controls. Only visible to you in this session.</div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="owner-password" placeholder="••••••••" />
+        <div id="login-error" style="font-size:11px;color:#f06060;margin-top:6px;min-height:16px;"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('login-modal')">Cancel</button>
+        <button class="btn-submit" onclick="attemptLogin()">Unlock →</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ADD PROJECT MODAL -->
-  <div class="modal-overlay" id="modal-overlay">
+  <div class="modal-overlay" id="add-project-modal">
     <div class="modal">
       <div class="modal-title">Add a Project</div>
-
+      <div class="modal-subtitle">Adds a new card to the projects grid for this session.</div>
       <div class="form-group">
         <label class="form-label">Project Name</label>
         <input class="form-input" type="text" id="proj-name" placeholder="e.g. MyTool" />
@@ -874,83 +803,344 @@
         <label class="form-label">Icon (emoji)</label>
         <input class="form-input" type="text" id="proj-icon" placeholder="🎛" maxlength="4" />
       </div>
-
       <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-cancel" onclick="closeModal('add-project-modal')">Cancel</button>
         <button class="btn-submit" onclick="addProject()">Add Project →</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ── WAVEFORM BARS ──
-    const waveform = document.getElementById('waveform');
-    const numBars = 28;
-    for (let i = 0; i < numBars; i++) {
-      const bar = document.createElement('div');
-      bar.className = 'waveform-bar';
-      const heights = [20, 40, 80, 120, 160, 180, 190, 200, 185, 160, 130, 90, 50, 30, 40, 60, 100, 150, 185, 195, 170, 130, 85, 50, 35, 45, 70, 30];
-      bar.style.height = (heights[i] || 60) + 'px';
-      bar.style.animationDelay = (i * 0.06) + 's';
-      waveform.appendChild(bar);
-    }
+  // ─────────────────────────────────────────────
+  // CONFIG — change this to your own password
+  // ─────────────────────────────────────────────
+  const OWNER_PASS = 'vllknny2024';
+  const RESUME_KEY = 'vllknny_resume_v1';
 
-    // ── SCROLL FADE ──
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // ── MODAL ──
-    function openModal() {
-      document.getElementById('modal-overlay').classList.add('active');
-    }
-    function closeModal() {
-      document.getElementById('modal-overlay').classList.remove('active');
-    }
-    document.getElementById('modal-overlay').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
+  // ── WAVEFORM ──
+  const wf = document.getElementById('waveform');
+  [20,40,80,120,160,180,190,200,185,160,130,90,50,30,40,60,100,150,185,195,170,130,85,50,35,45,70,30]
+    .forEach((h, i) => {
+      const b = document.createElement('div');
+      b.className = 'waveform-bar';
+      b.style.height = h + 'px';
+      b.style.animationDelay = (i * 0.06) + 's';
+      wf.appendChild(b);
     });
 
-    function addProject() {
-      const name = document.getElementById('proj-name').value.trim();
-      const desc = document.getElementById('proj-desc').value.trim();
-      const url  = document.getElementById('proj-url').value.trim();
-      const tags = document.getElementById('proj-tags').value.trim();
-      const icon = document.getElementById('proj-icon').value.trim() || '📁';
-      if (!name) return;
+  // ── SCROLL FADE ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-      const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
-      const tagHtml = tagList.map(t => `<span class="tag">${t}</span>`).join('');
+  // ─────────────────────────────────────────────
+  // OWNER MODE
+  // ─────────────────────────────────────────────
+  let isOwner = sessionStorage.getItem('ownerMode') === '1';
 
-      const grid = document.getElementById('projects-grid');
-      const addCard = grid.querySelector('.project-card-add');
+  function applyOwnerMode() {
+    document.body.classList.toggle('owner-mode', isOwner);
+    const btn = document.getElementById('owner-btn');
+    btn.classList.toggle('active', isOwner);
+    btn.textContent = isOwner ? '⚿ owner' : '⚿';
+    btn.title = isOwner ? 'Exit owner mode' : 'Owner login';
+  }
 
-      const card = document.createElement('a');
-      card.className = 'project-card';
-      card.href = url || '#';
-      if (url) card.target = '_blank';
-      card.innerHTML = `
-        <div class="project-header">
-          <div class="project-icon">${icon}</div>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-name">${name}</div>
-        <p class="project-desc">${desc || 'No description provided.'}</p>
-        <div class="project-tags">${tagHtml}</div>
-      `;
+  document.getElementById('owner-btn').addEventListener('click', () => {
+    if (isOwner) {
+      isOwner = false;
+      sessionStorage.removeItem('ownerMode');
+      applyOwnerMode();
+    } else {
+      openModal('login-modal');
+      setTimeout(() => document.getElementById('owner-password').focus(), 280);
+    }
+  });
 
-      grid.insertBefore(card, addCard);
+  function attemptLogin() {
+    const pw = document.getElementById('owner-password').value;
+    if (pw === OWNER_PASS) {
+      isOwner = true;
+      sessionStorage.setItem('ownerMode', '1');
+      applyOwnerMode();
+      closeModal('login-modal');
+      document.getElementById('owner-password').value = '';
+      document.getElementById('login-error').textContent = '';
+    } else {
+      document.getElementById('login-error').textContent = 'Incorrect password.';
+      document.getElementById('owner-password').value = '';
+      document.getElementById('owner-password').focus();
+    }
+  }
 
-      // reset form
-      ['proj-name','proj-desc','proj-url','proj-tags','proj-icon'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      closeModal();
+  document.getElementById('owner-password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptLogin();
+  });
+
+  applyOwnerMode();
+
+  // ─────────────────────────────────────────────
+  // MODALS
+  // ─────────────────────────────────────────────
+  function openModal(id) { document.getElementById(id).classList.add('active'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape')
+      document.querySelectorAll('.modal-overlay.active').forEach(el => closeModal(el.id));
+  });
+
+  function openAddModal() { if (isOwner) openModal('add-project-modal'); }
+
+  // ─────────────────────────────────────────────
+  // ADD PROJECT
+  // ─────────────────────────────────────────────
+  function addProject() {
+    const name = document.getElementById('proj-name').value.trim();
+    const desc = document.getElementById('proj-desc').value.trim();
+    const url  = document.getElementById('proj-url').value.trim();
+    const tags = document.getElementById('proj-tags').value.trim();
+    const icon = document.getElementById('proj-icon').value.trim() || '📁';
+    if (!name) return;
+
+    const tagHtml = tags.split(',').map(t => t.trim()).filter(Boolean)
+      .map(t => `<span class="tag">${t}</span>`).join('');
+
+    const card = document.createElement('a');
+    card.className = 'project-card';
+    card.href = url || '#';
+    if (url) card.target = '_blank';
+    card.innerHTML = `
+      <div class="project-header">
+        <div class="project-icon">${icon}</div>
+        <span class="project-arrow">↗</span>
+      </div>
+      <div class="project-name">${name}</div>
+      <p class="project-desc">${desc || 'No description provided.'}</p>
+      <div class="project-tags">${tagHtml}</div>
+    `;
+
+    const grid = document.getElementById('projects-grid');
+    grid.insertBefore(card, document.getElementById('add-project-card'));
+
+    ['proj-name','proj-desc','proj-url','proj-tags','proj-icon'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    closeModal('add-project-modal');
+  }
+
+  // ─────────────────────────────────────────────
+  // RESUME — file handling
+  // ─────────────────────────────────────────────
+  let resumeFile = null; // { base64, mediaType, name }
+
+  const uploadZone = document.getElementById('upload-zone');
+  const fileInput  = document.getElementById('resume-file-input');
+  const parseBtn   = document.getElementById('parse-btn');
+  const statusEl   = document.getElementById('resume-status');
+
+  uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('dragging'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragging'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragging');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  function handleFile(file) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['pdf','doc','docx','txt'].includes(ext)) {
+      setStatus('Unsupported file. Use PDF, DOCX, or TXT.', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result.split(',')[1];
+      let mediaType = 'application/octet-stream';
+      if (ext === 'pdf')  mediaType = 'application/pdf';
+      if (ext === 'txt')  mediaType = 'text/plain';
+      if (ext === 'docx') mediaType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      resumeFile = { base64, mediaType, name: file.name, ext };
+      document.getElementById('upload-filename').textContent = '✓ ' + file.name;
+      parseBtn.disabled = false;
+      setStatus('');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function setStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'resume-status' + (type ? ' ' + type : '');
+  }
+
+  // ─────────────────────────────────────────────
+  // RESUME — parse via Anthropic API
+  // ─────────────────────────────────────────────
+  async function parseResume() {
+    if (!resumeFile) return;
+    parseBtn.disabled = true;
+    setStatus('Parsing resume with AI…', 'loading');
+
+    const systemPrompt = `You are a resume parser. Extract structured data from the resume and return ONLY valid JSON — no markdown, no explanation. Use this exact schema:
+{
+  "experience": [
+    { "org": "Company or org name", "role": "Job title", "period": "Date range e.g. 2022 – 2024", "desc": "1–2 sentence summary of role." }
+  ],
+  "education": [
+    { "org": "School name", "role": "Degree and field", "period": "Date range", "desc": "Optional note." }
+  ],
+  "skills": ["skill1", "skill2"]
+}
+Keep experience and education in reverse chronological order. Skills: up to 20 individual items. Return only JSON, nothing else.`;
+
+    let userContent;
+
+    if (resumeFile.ext === 'pdf') {
+      userContent = [
+        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: resumeFile.base64 } },
+        { type: 'text', text: 'Parse this resume and return JSON as instructed.' }
+      ];
+    } else {
+      // For non-PDF: decode base64 to text and send as plain text
+      let textContent = '';
+      try {
+        textContent = atob(resumeFile.base64);
+      } catch(e) {
+        textContent = resumeFile.name;
+      }
+      userContent = `Parse this resume and return JSON as instructed.\n\nResume content:\n${textContent}`;
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-  </script>
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userContent }]
+        })
+      });
 
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message || 'API error');
+
+      const raw = (data.content || []).map(b => b.text || '').join('').trim();
+      const clean = raw.replace(/^```(?:json)?|```$/gm, '').trim();
+      const parsed = JSON.parse(clean);
+
+      localStorage.setItem(RESUME_KEY, JSON.stringify(parsed));
+      renderResume(parsed);
+      setStatus('✓ Resume parsed and saved.', 'success');
+
+    } catch(err) {
+      console.error(err);
+      setStatus('Error: ' + err.message, 'error');
+      parseBtn.disabled = false;
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // RESUME — render
+  // ─────────────────────────────────────────────
+  function renderResume(data) {
+    const area = document.getElementById('resume-content-area');
+    if (!data || (!data.experience?.length && !data.education?.length && !data.skills?.length)) {
+      area.innerHTML = emptyHtml();
+      return;
+    }
+
+    let html = '<div class="resume-content">';
+
+    if (data.experience && data.experience.length) {
+      html += `<div class="resume-block">
+        <div class="resume-block-title">Experience</div>
+        <div class="resume-entries">`;
+      data.experience.forEach(e => {
+        html += `<div>
+          <div class="resume-entry-org">${esc(e.org)}</div>
+          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' · ' + esc(e.period) : ''}</div>
+          ${e.desc ? `<div class="resume-entry-desc">${esc(e.desc)}</div>` : ''}
+        </div>`;
+      });
+      html += `</div></div>`;
+    }
+
+    if (data.education && data.education.length) {
+      html += `<div class="resume-block">
+        <div class="resume-block-title">Education</div>
+        <div class="resume-entries">`;
+      data.education.forEach(e => {
+        html += `<div>
+          <div class="resume-entry-org">${esc(e.org)}</div>
+          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' · ' + esc(e.period) : ''}</div>
+          ${e.desc ? `<div class="resume-entry-desc">${esc(e.desc)}</div>` : ''}
+        </div>`;
+      });
+      html += `</div></div>`;
+    }
+
+    if (data.skills && data.skills.length) {
+      html += `<div class="resume-block">
+        <div class="resume-block-title">Skills from Résumé</div>
+        <div class="resume-skill-tags">
+          ${data.skills.map(s => `<span class="resume-skill-tag">${esc(s)}</span>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    html += '</div>';
+    area.innerHTML = html;
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  function clearResume() {
+    localStorage.removeItem(RESUME_KEY);
+    document.getElementById('resume-content-area').innerHTML = emptyHtml();
+    resumeFile = null;
+    document.getElementById('upload-filename').textContent = '';
+    fileInput.value = '';
+    parseBtn.disabled = true;
+    setStatus('');
+  }
+
+  function emptyHtml() {
+    return `<div class="resume-empty">
+      <div style="font-size:24px;margin-bottom:12px;opacity:0.35;">📄</div>
+      No résumé uploaded yet.<br/>
+      <span style="font-size:12px;color:var(--muted);">Owner: log in and upload to populate this section.</span>
+    </div>`;
+  }
+
+  // Load on page start
+  (function init() {
+    try {
+      const saved = localStorage.getItem(RESUME_KEY);
+      if (saved) {
+        renderResume(JSON.parse(saved));
+      } else {
+        document.getElementById('resume-content-area').innerHTML = emptyHtml();
+      }
+    } catch(e) {
+      document.getElementById('resume-content-area').innerHTML = emptyHtml();
+    }
+  })();
+  </script>
 </body>
 </html>
