@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kunal Ghosh — vllknny</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080a0e;
+      --surface: #0e1219;
+      --card: #121820;
+      --border: #1e2535;
+      --accent: #c8f060;
+      --accent2: #60c8f0;
+      --muted: #4a5568;
+      --text: #d6dce8;
+      --text-dim: #8892a4;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,240,96,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,240,96,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      backdrop-filter: blur(20px);
+      background: rgba(8,10,14,0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 48px 80px;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 12px;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 10vw, 120px);
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.35s;
+    }
+
+    .hero-name span {
+      color: var(--accent);
+    }
+
+    .hero-handle {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--text-dim);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+
+    .hero-bio {
+      max-width: 560px;
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.8;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.65s;
+    }
+
+    .hero-bio strong { color: var(--text); font-weight: 500; }
+
+    .hero-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #080a0e;
+      font-weight: 500;
+    }
+    .btn-primary:hover {
+      background: #d4f472;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── WAVEFORM DECORATION ── */
+    .waveform {
+      position: absolute;
+      right: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 200px;
+      opacity: 0.15;
+    }
+
+    .waveform-bar {
+      width: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      animation: wave 1.2s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.3); }
+      50% { transform: scaleY(1); }
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 80px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    /* ── PROJECTS ── */
+    #projects { border-top: 1px solid var(--border); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .project-card {
+      background: var(--card);
+      padding: 32px;
+      transition: background 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .project-card:hover { background: #161e2a; }
+
+    .project-card:hover .project-arrow { transform: translate(3px, -3px); }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .project-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    .project-arrow {
+      font-size: 18px;
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+
+    .project-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    .tag-accent {
+      border-color: rgba(200,240,96,0.3);
+      color: var(--accent);
+    }
+
+    /* ADD PROJECT CARD */
+    .project-card-add {
+      background: var(--card);
+      padding: 32px;
+      border: 2px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 220px;
+    }
+
+    .project-card-add:hover {
+      border-color: var(--accent);
+      background: #161e2a;
+    }
+
+    .project-card-add:hover .add-icon { color: var(--accent); }
+
+    .add-icon {
+      font-size: 28px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .add-label {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── SKILLS ── */
+    #skills { border-top: 1px solid var(--border); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .skill-cell {
+      background: var(--card);
+      padding: 24px;
+    }
+
+    .skill-category {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .skill-list {
+      list-style: none;
+    }
+
+    .skill-list li {
+      font-size: 13px;
+      color: var(--text-dim);
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(30,37,53,0.5);
+    }
+
+    .skill-list li:last-child { border-bottom: none; }
+
+    /* ── ABOUT ── */
+    #about {
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    .about-text p strong { color: var(--accent); font-weight: 400; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      align-self: start;
+    }
+
+    .stat-box {
+      background: var(--card);
+      padding: 28px;
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 100px 48px;
+    }
+
+    #contact .section-label { justify-content: center; }
+    #contact .section-label::after { display: none; }
+
+    .contact-heading {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    .contact-heading span { color: var(--accent); }
+
+    .contact-sub {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 48px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8,10,14,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px;
+      width: 100%;
+      max-width: 520px;
+      margin: 24px;
+      transform: translateY(20px);
+      transition: transform 0.25s;
+    }
+
+    .modal-overlay.active .modal { transform: translateY(0); }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-textarea { resize: vertical; min-height: 100px; }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: var(--muted); }
+
+    .btn-submit {
+      background: var(--accent);
+      border: none;
+      color: #080a0e;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: 0.08em;
+    }
+    .btn-submit:hover { background: #d4f472; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 24px 60px; }
+      .waveform { display: none; }
+      section { padding: 60px 24px; }
+      #about { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+      footer { flex-direction: column; gap: 8px; padding: 20px 24px; }
+      #contact { padding: 60px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">vllknny</div>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Comp. Data Science · Audio Engineering</div>
+      <h1 class="hero-name">Kunal<br/><span>Ghosh</span></h1>
+      <div class="hero-handle">@vllknny · Penn State · Harrisburg, PA</div>
+      <p class="hero-bio">
+        CS + Data Science student building at the intersection of
+        <strong>audio engineering</strong> and <strong>software development</strong>.
+        17+ years behind the boards — now I write the code that shapes the sound.
+      </p>
+      <div class="hero-links">
+        <a class="btn btn-primary" href="#projects">View Projects ↓</a>
+        <a class="btn btn-ghost" href="https://github.com/vllknny" target="_blank">GitHub ↗</a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/vllknny" target="_blank">LinkedIn ↗</a>
+      </div>
+    </div>
+
+    <!-- WAVEFORM DECO -->
+    <div class="waveform" id="waveform"></div>
+  </div>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="fade-in">
+    <div class="section-label">Work</div>
+    <h2 class="section-title">Projects</h2>
+
+    <div class="projects-grid" id="projects-grid">
+
+      <!-- AQgen -->
+      <a class="project-card" href="https://github.com/vllknny/AQgen" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">⚡</div>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-name">AQgen</div>
+        <p class="project-desc">
+          Auto-question generation tool. Leverages AI to intelligently create questions from input content — useful for study aids, quiz platforms, and content review pipelines.
+        </p>
+        <div class="project-tags">
+          <span class="tag tag-accent">Pinned</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">AI/NLP</span>
+        </div>
+      </a>
+
+      <!-- ssampler -->
+      <a class="project-card" href="https://github.com/vllknny/ssampler" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">🎚</div>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-name">ssampler</div>
+        <p class="project-desc">
+          Stem-splitting sampler powered by <strong style="color:var(--text)">Demucs</strong> and built with JUCE &amp; C++. Separates audio into stems in real-time for live sampling and creative resampling workflows.
+        </p>
+        <div class="project-tags">
+          <span class="tag tag-accent">Pinned</span>
+          <span class="tag">C++</span>
+          <span class="tag">JUCE</span>
+          <span class="tag">Demucs</span>
+          <span class="tag">Audio DSP</span>
+        </div>
+      </a>
+
+      <!-- Add project card -->
+      <div class="project-card-add" onclick="openModal()">
+        <div class="add-icon">+</div>
+        <div class="add-label">Add a project</div>
+        <div style="font-size:12px;color:var(--muted);max-width:180px;line-height:1.5;">
+          Pin another repo or custom project here
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="fade-in">
+    <div class="section-label">Stack</div>
+    <h2 class="section-title">Skills & Tools</h2>
+
+    <div class="skills-grid">
+      <div class="skill-cell">
+        <div class="skill-category">Languages</div>
+        <ul class="skill-list">
+          <li>Python</li>
+          <li>C / C++</li>
+          <li>JavaScript</li>
+          <li>Java</li>
+          <li>SQL</li>
+        </ul>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-category">Audio / DSP</div>
+        <ul class="skill-list">
+          <li>JUCE Framework</li>
+          <li>Demucs (ML)</li>
+          <li>Audio Engineering</li>
+          <li>Signal Processing</li>
+          <li>Pro Tools / DAWs</li>
+        </ul>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-category">Data / AI</div>
+        <ul class="skill-list">
+          <li>Machine Learning</li>
+          <li>NLP</li>
+          <li>Data Analysis</li>
+          <li>PyTorch / NumPy</li>
+        </ul>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-category">Tools</div>
+        <ul class="skill-list">
+          <li>Git / GitHub</li>
+          <li>Linux</li>
+          <li>VS Code</li>
+          <li>CMake</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="fade-in" style="padding: 80px 48px;">
+    <div>
+      <div class="section-label">Background</div>
+      <h2 class="section-title">About Me</h2>
+      <div class="about-text">
+        <p>
+          I'm Kunal — a <strong>Computer & Data Science major at Penn State</strong>, also a
+          lifelong audio engineer who's been mixing, producing, and shaping sound since 2009.
+        </p>
+        <p>
+          My work lives at the crossroads of two worlds: the precision of software
+          engineering and the artistry of music production. I build tools that serve
+          both disciplines — from ML-driven question generators to real-time audio
+          stem splitters.
+        </p>
+        <p>
+          Based in <strong>Harrisburg, PA</strong>. Open to collaborations,
+          internships, and conversations about anything audio or code.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-stats">
+      <div class="stat-box">
+        <div class="stat-number">17+</div>
+        <div class="stat-label">Years in Audio</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">12</div>
+        <div class="stat-label">GitHub Repos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">C++</div>
+        <div class="stat-label">DSP stack</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">PSU</div>
+        <div class="stat-label">CS + Data Sci</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="fade-in">
+    <div class="section-label">Reach out</div>
+    <div class="contact-heading">Let's build<br/><span>something.</span></div>
+    <p class="contact-sub">Open to collabs, internships, and cool audio/CS projects.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="https://linkedin.com/in/vllknny" target="_blank">LinkedIn ↗</a>
+      <a class="btn btn-ghost" href="https://github.com/vllknny" target="_blank">GitHub ↗</a>
+      <a class="btn btn-ghost" href="mailto:kunal@example.com">Email ↗</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Kunal Ghosh · <a href="https://github.com/vllknny" target="_blank">vllknny</a></span>
+    <span>Built for <a href="https://pages.github.com" target="_blank">GitHub Pages</a></span>
+  </footer>
+
+  <!-- ADD PROJECT MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-title">Add a Project</div>
+
+      <div class="form-group">
+        <label class="form-label">Project Name</label>
+        <input class="form-input" type="text" id="proj-name" placeholder="e.g. MyTool" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="proj-desc" placeholder="What does it do?"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">GitHub URL</label>
+        <input class="form-input" type="url" id="proj-url" placeholder="https://github.com/vllknny/..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tags (comma-separated)</label>
+        <input class="form-input" type="text" id="proj-tags" placeholder="Python, ML, Audio" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Icon (emoji)</label>
+        <input class="form-input" type="text" id="proj-icon" placeholder="🎛" maxlength="4" />
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-submit" onclick="addProject()">Add Project →</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── WAVEFORM BARS ──
+    const waveform = document.getElementById('waveform');
+    const numBars = 28;
+    for (let i = 0; i < numBars; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'waveform-bar';
+      const heights = [20, 40, 80, 120, 160, 180, 190, 200, 185, 160, 130, 90, 50, 30, 40, 60, 100, 150, 185, 195, 170, 130, 85, 50, 35, 45, 70, 30];
+      bar.style.height = (heights[i] || 60) + 'px';
+      bar.style.animationDelay = (i * 0.06) + 's';
+      waveform.appendChild(bar);
+    }
+
+    // ── SCROLL FADE ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ── MODAL ──
+    function openModal() {
+      document.getElementById('modal-overlay').classList.add('active');
+    }
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+    }
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    function addProject() {
+      const name = document.getElementById('proj-name').value.trim();
+      const desc = document.getElementById('proj-desc').value.trim();
+      const url  = document.getElementById('proj-url').value.trim();
+      const tags = document.getElementById('proj-tags').value.trim();
+      const icon = document.getElementById('proj-icon').value.trim() || '📁';
+      if (!name) return;
+
+      const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
+      const tagHtml = tagList.map(t => `<span class="tag">${t}</span>`).join('');
+
+      const grid = document.getElementById('projects-grid');
+      const addCard = grid.querySelector('.project-card-add');
+
+      const card = document.createElement('a');
+      card.className = 'project-card';
+      card.href = url || '#';
+      if (url) card.target = '_blank';
+      card.innerHTML = `
+        <div class="project-header">
+          <div class="project-icon">${icon}</div>
+          <span class="project-arrow">↗</span>
+        </div>
+        <div class="project-name">${name}</div>
+        <p class="project-desc">${desc || 'No description provided.'}</p>
+        <div class="project-tags">${tagHtml}</div>
+      `;
+
+      grid.insertBefore(card, addCard);
+
+      // reset form
+      ['proj-name','proj-desc','proj-url','proj-tags','proj-icon'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      closeModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </script>
+
+</body>
+</html>
