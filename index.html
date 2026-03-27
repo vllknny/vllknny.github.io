@@ -639,10 +639,12 @@
           <span class="project-arrow">↗</span>
         </div>
         <div class="project-name">AQgen</div>
-        <p class="project-desc">Auto-query generation tool. Leverages AI to intelligently create queries from input content — useful for data parsing, cloud platforms, and content review pipelines.</p>
+        <p class="project-desc">Auto-query generation tool. Leverages AI to intelligently create querys from input content using NLP — useful for overhead, cloud platforms, and content review.</p>
         <div class="project-tags">
           <span class="tag tag-accent">Pinned</span>
           <span class="tag">JavaScript</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Data Analysis</span>
           <span class="tag">AI/NLP</span>
         </div>
       </a>
@@ -712,7 +714,7 @@
       <h2 class="section-title">About Me</h2>
       <div class="about-text">
         <p>I'm Kunal — a <strong>Computer & Data Science major at Penn State</strong>, also a lifelong audio engineer who's been mixing, producing, and shaping sound since 2009.</p>
-        <p>My work lives at the crossroads of two worlds: the precision of software engineering and the artistry of music production. I build tools that serve both disciplines — from ML-driven query generators in Azure to real-time audio stem splitters.</p>
+        <p>My work lives at the crossroads of two worlds: the precision of software engineering and the artistry of music production. I build tools that serve both disciplines — from ML-driven query generators to real-time audio stem splitters.</p>
         <p>Based in <strong>Harrisburg, PA</strong>. Open to collaborations, internships, and conversations about anything audio or code.</p>
       </div>
     </div>
@@ -751,7 +753,7 @@
     <div class="contact-links">
       <a class="btn btn-primary" href="https://linkedin.com/in/vllknny" target="_blank">LinkedIn ↗</a>
       <a class="btn btn-ghost" href="https://github.com/vllknny" target="_blank">GitHub ↗</a>
-      <a class="btn btn-ghost" href="mailto:kunal@example.com">Email ↗</a>
+      <a class="btn btn-ghost" href="/cdn-cgi/l/email-protection#98f3edf6f9f4d8fde0f9f5e8f4fdb6fbf7f5">Email ↗</a>
     </div>
   </section>
 
@@ -810,7 +812,7 @@
     </div>
   </div>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ─────────────────────────────────────────────
   // CONFIG — change this to your own password
   // ─────────────────────────────────────────────
@@ -1048,6 +1050,7 @@ Keep experience and education in reverse chronological order. Skills: up to 20 i
     }
   }
 
+
   // ─────────────────────────────────────────────
   // RESUME — render
   // ─────────────────────────────────────────────
@@ -1067,7 +1070,7 @@ Keep experience and education in reverse chronological order. Skills: up to 20 i
       data.experience.forEach(e => {
         html += `<div>
           <div class="resume-entry-org">${esc(e.org)}</div>
-          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' · ' + esc(e.period) : ''}</div>
+          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' &middot; ' + esc(e.period) : ''}</div>
           ${e.desc ? `<div class="resume-entry-desc">${esc(e.desc)}</div>` : ''}
         </div>`;
       });
@@ -1081,8 +1084,22 @@ Keep experience and education in reverse chronological order. Skills: up to 20 i
       data.education.forEach(e => {
         html += `<div>
           <div class="resume-entry-org">${esc(e.org)}</div>
-          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' · ' + esc(e.period) : ''}</div>
+          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' &middot; ' + esc(e.period) : ''}</div>
           ${e.desc ? `<div class="resume-entry-desc">${esc(e.desc)}</div>` : ''}
+        </div>`;
+      });
+      html += `</div></div>`;
+    }
+
+    if (data.projects && data.projects.length) {
+      html += `<div class="resume-block">
+        <div class="resume-block-title">Featured Projects</div>
+        <div class="resume-entries">`;
+      data.projects.forEach(p => {
+        html += `<div>
+          <div class="resume-entry-org">${esc(p.name)}</div>
+          <div class="resume-entry-meta" style="color:var(--accent);opacity:0.75;">${esc(p.tags)}</div>
+          ${p.desc ? `<div class="resume-entry-desc">${esc(p.desc)}</div>` : ''}
         </div>`;
       });
       html += `</div></div>`;
@@ -1090,7 +1107,7 @@ Keep experience and education in reverse chronological order. Skills: up to 20 i
 
     if (data.skills && data.skills.length) {
       html += `<div class="resume-block">
-        <div class="resume-block-title">Skills from Résumé</div>
+        <div class="resume-block-title">Skills &amp; Certifications</div>
         <div class="resume-skill-tags">
           ${data.skills.map(s => `<span class="resume-skill-tag">${esc(s)}</span>`).join('')}
         </div>
@@ -1112,36 +1129,85 @@ Keep experience and education in reverse chronological order. Skills: up to 20 i
 
   function clearResume() {
     localStorage.removeItem(RESUME_KEY);
-    document.getElementById('resume-content-area').innerHTML = emptyHtml();
+    renderResume(BAKED_RESUME);
     resumeFile = null;
     document.getElementById('upload-filename').textContent = '';
     fileInput.value = '';
     parseBtn.disabled = true;
-    setStatus('');
+    setStatus('Resume reset to default.');
   }
 
   function emptyHtml() {
     return `<div class="resume-empty">
-      <div style="font-size:24px;margin-bottom:12px;opacity:0.35;">📄</div>
-      No résumé uploaded yet.<br/>
+      <div style="font-size:24px;margin-bottom:12px;opacity:0.35;">&#128196;</div>
+      No resume data available.<br/>
       <span style="font-size:12px;color:var(--muted);">Owner: log in and upload to populate this section.</span>
     </div>`;
   }
 
-  // Load on page start
+  // ─────────────────────────────────────────────
+  // BAKED-IN RESUME — from resume
+  // Owner can override by uploading a new file
+  // ─────────────────────────────────────────────
+  const BAKED_RESUME = {
+    "experience": [
+      {
+        "org": "Meta",
+        "role": "Demucs v4 / AI Engineer",
+        "period": "June 2020 – September 2023",
+        "desc": "Contracted by Meta Research to integrate ML-powered components into DSP pipelines supporting transformer-based audio stem separation (MUSDB dataset, 150+ multitrack songs). Implemented CUDA-accelerated hybrid transformer architecture and spectrogram analysis routines processing 1000s of audio frames per track."
+      },
+      {
+        "org": "Self Employed",
+        "role": "Audio Engineer",
+        "period": "October 2009 – May 2024",
+        "desc": "Engineered 2,000+ movies, songs, and audio projects. Delivered high-reliability audio systems under real-world latency and quality constraints, optimizing workflows through automation and signals-based tooling."
+      }
+    ],
+    "education": [
+      {
+        "org": "Pennsylvania State University",
+        "role": "B.E. Computational Data Science — GPA 3.32 / 4.00",
+        "period": "Expected May 2028",
+        "desc": "Minors in Economics & Artificial Intelligence. Orgs: IEEE, Engineering Leadership Society, HackPSU, PSMusicGroup."
+      }
+    ],
+    "projects": [
+      {
+        "name": "JUCE Audio Intelligence Platform",
+        "tags": "C++, Rust, Hugging Face, DeMucs v4",
+        "desc": "Modular OOP audio signal processing app with ML-integrated DSP pipelines. Implements transformer-based stem separation via DeMucs v4 with spectrogram normalization and feature extraction."
+      },
+      {
+        "name": "Topology Research Analysis",
+        "tags": "Python, Docker, SciPy, Data Visualization",
+        "desc": "Open-source research support framework for topology experiments — containerized reproducible environments, modular scientific computing utilities, and automated dataset tooling."
+      },
+      {
+        "name": "Monte Carlo Financial Return Simulator",
+        "tags": "Python, PyTorch, yFinance",
+        "desc": "Stochastic simulation engine for historical and forecasted market returns using Brownian motion, Ito-inspired probabilistic modeling, and CQF Institute international data."
+      }
+    ],
+    "skills": [
+      "Python","C++","Rust","JavaScript","R","MySQL","MongoDB",
+      "PyTorch","Keras","Pandas","NumPy",
+      "Microsoft Azure","Docker","Kubernetes",
+      "LLM Inference","Semantic Embeddings",
+      "AZ-900 (Azure Fundamentals)","DP-900 (Azure Data Fundamentals)","Six Sigma Green Belt"
+    ]
+  };
+
+  // Load on page start — localStorage overrides baked data if owner uploads newer resume
   (function init() {
     try {
       const saved = localStorage.getItem(RESUME_KEY);
-      if (saved) {
-        renderResume(JSON.parse(saved));
-      } else {
-        document.getElementById('resume-content-area').innerHTML = emptyHtml();
-      }
+      renderResume(saved ? JSON.parse(saved) : BAKED_RESUME);
     } catch(e) {
-      document.getElementById('resume-content-area').innerHTML = emptyHtml();
+      renderResume(BAKED_RESUME);
     }
   })();
+
   </script>
 </body>
 </html>
-
