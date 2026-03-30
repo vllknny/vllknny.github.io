@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kunal Ghosh — vllknny</title>
+  <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/104706563?v=4" />
+  <link rel="apple-touch-icon" href="https://avatars.githubusercontent.com/u/104706563?v=4" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Instrument+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:      #f5f2ed;
+      --bg2:     #edeae4;
+      --surface: #ffffff;
+      --border:  #e0dbd3;
+      --text:    #1a1714;
+      --text-2:  #6b6560;
+      --text-3:  #a09890;
+      --serif:   'Playfair Display', Georgia, serif;
+      --sans:    'Instrument Sans', system-ui, sans-serif;
+      --mono:    'DM Mono', monospace;
+      --r:       4px;
+      --max:     800px;
+      --pad:     clamp(24px, 7vw, 88px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px var(--pad);
+      background: rgba(245,242,237,0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--border); }
+    .nav-name { font-family: var(--serif); font-size: 1rem; font-weight: 400; letter-spacing: 0.01em; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    #owner-btn {
+      background: none; border: 1px solid var(--border); border-radius: 2px;
+      color: var(--text-3); font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.06em; padding: 4px 10px; cursor: pointer; transition: all 0.2s;
+    }
+    #owner-btn:hover, #owner-btn.active { border-color: var(--text-2); color: var(--text); }
+
+    /* LAYOUT */
+    .page { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .divider { height: 1px; background: var(--border); }
+
+    /* HERO */
+    .hero { padding: 160px 0 96px; }
+    .hero-eyebrow {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 300;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 28px; opacity: 0; animation: up 0.7s ease forwards 0.1s;
+    }
+    .hero-name {
+      font-family: var(--serif); font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 400; line-height: 1.06; letter-spacing: -0.02em;
+      margin-bottom: 32px; opacity: 0; animation: up 0.7s ease forwards 0.25s;
+    }
+    .hero-name em { font-style: italic; color: var(--text-2); }
+    .hero-bio {
+      font-size: 1.02rem; font-weight: 300; color: var(--text-2);
+      line-height: 1.85; max-width: 500px; margin-bottom: 44px;
+      opacity: 0; animation: up 0.7s ease forwards 0.4s;
+    }
+    .hero-bio strong { color: var(--text); font-weight: 400; }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 10px; opacity: 0; animation: up 0.7s ease forwards 0.55s; }
+
+    /* PILLS */
+    .pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--sans); font-size: 0.78rem; font-weight: 400;
+      letter-spacing: 0.03em; padding: 9px 18px; border-radius: 100px;
+      border: 1px solid var(--border); color: var(--text-2);
+      background: var(--surface); transition: all 0.2s; white-space: nowrap;
+    }
+    .pill:hover { border-color: var(--text-2); color: var(--text); }
+    .pill-solid { background: var(--text); border-color: var(--text); color: var(--bg); }
+    .pill-solid:hover { background: #3a3530; border-color: #3a3530; color: var(--bg); }
+    .pill svg { flex-shrink: 0; }
+
+    /* SECTIONS */
+    .section { padding: 88px 0; }
+    .section-label {
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 300;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 48px;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 10px;
+    }
+    .section-title em { font-style: italic; color: var(--text-2); }
+
+    /* ABOUT GRID */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .about-text p { font-size: 0.95rem; color: var(--text-2); line-height: 1.88; margin-bottom: 16px; }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--text); font-weight: 400; }
+    .about-sidebar { display: flex; flex-direction: column; gap: 30px; }
+    .sidebar-block-label {
+      font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+    }
+    .sidebar-item { display: flex; align-items: flex-start; gap: 11px; }
+    .sidebar-icon { width: 17px; height: 17px; flex-shrink: 0; margin-top: 3px; color: var(--text-3); }
+    .sidebar-item-text { font-size: 0.87rem; color: var(--text-2); line-height: 1.55; }
+    .sidebar-item-text strong { color: var(--text); font-weight: 400; display: block; margin-bottom: 1px; }
+
+    /* RESUME UPLOAD */
+    .resume-upload-wrap {
+      display: none; flex-direction: column; gap: 10px;
+      margin-top: 24px; padding: 18px; border: 1px dashed var(--border);
+      border-radius: var(--r); background: var(--bg2); transition: border-color 0.2s;
+    }
+    body.owner-mode .resume-upload-wrap { display: flex; }
+    .resume-upload-wrap.drag { border-color: var(--text-2); }
+    .upload-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .upload-row input { display: none; }
+    .upload-label { font-size: 0.84rem; color: var(--text-2); }
+    .upload-label strong { color: var(--text); font-weight: 400; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+    #upload-filename { font-family: var(--mono); font-size: 0.72rem; color: #5a7a50; }
+    .resume-parse-btn {
+      align-self: flex-start; font-family: var(--sans); font-size: 0.8rem; font-weight: 400;
+      padding: 8px 18px; border-radius: var(--r); border: 1px solid var(--text);
+      background: var(--text); color: var(--bg); cursor: pointer; transition: background 0.2s;
+    }
+    .resume-parse-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .resume-parse-btn:not(:disabled):hover { background: #3a3530; }
+    .resume-status { font-family: var(--mono); font-size: 0.72rem; color: var(--text-3); min-height: 18px; }
+    .resume-status.loading { color: #5a7a9a; }
+    .resume-status.error   { color: #9a5050; }
+    .resume-status.success { color: #5a7a50; }
+    .resume-clear-btn {
+      display: none; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.05em;
+      color: var(--text-3); background: none; border: 1px solid var(--border);
+      border-radius: var(--r); padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .resume-clear-btn:hover { color: #9a5050; border-color: #9a5050; }
+    body.owner-mode .resume-clear-btn { display: inline-block; }
+
+    /* EXPERIENCE */
+    .exp-list { display: flex; flex-direction: column; }
+    .exp-item {
+      display: grid; grid-template-columns: 120px 1fr; gap: 32px;
+      padding: 32px 0; border-bottom: 1px solid var(--border);
+    }
+    .exp-item:first-child { border-top: 1px solid var(--border); }
+    .exp-period { font-family: var(--mono); font-size: 0.67rem; font-weight: 300; color: var(--text-3); line-height: 1.7; padding-top: 4px; }
+    .exp-org { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; margin-bottom: 2px; }
+    .exp-role { font-size: 0.84rem; color: var(--text-2); margin-bottom: 10px; font-weight: 400; }
+    .exp-desc { font-size: 0.88rem; color: var(--text-2); line-height: 1.82; }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .exp-tag {
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.05em;
+      padding: 3px 9px; border-radius: 2px; border: 1px solid var(--border);
+      color: var(--text-3); background: var(--bg2);
+    }
+
+    /* PORTFOLIO */
+    .portfolio-intro { font-size: 0.95rem; color: var(--text-2); line-height: 1.82; max-width: 460px; margin-bottom: 44px; }
+
+    /* focus-on-hover: dim all, undim hovered */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: var(--border);
+    }
+    .portfolio-grid:hover .portfolio-item,
+    .portfolio-grid:hover .portfolio-add { opacity: 0.32; }
+    .portfolio-grid .portfolio-item:hover,
+    .portfolio-grid .portfolio-add:hover { opacity: 1; }
+
+    .portfolio-item {
+      position: relative; overflow: hidden; background: var(--bg2);
+      aspect-ratio: 4/3; transition: opacity 0.3s ease; cursor: pointer;
+    }
+    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+    .portfolio-item:hover img { transform: scale(1.04); }
+
+    .portfolio-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 11px; background: var(--bg2); color: var(--text-3);
+    }
+    .portfolio-placeholder svg { opacity: 0.35; }
+    .portfolio-placeholder span { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.55; }
+
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,23,20,0.82) 0%, rgba(26,23,20,0) 55%);
+      opacity: 0; transition: opacity 0.28s ease;
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-overlay-name { font-family: var(--serif); font-size: 1rem; font-weight: 400; color: #fff; margin-bottom: 3px; }
+    .portfolio-overlay-tags { font-family: var(--mono); font-size: 0.61rem; letter-spacing: 0.07em; color: rgba(255,255,255,0.58); }
+    .portfolio-ext-link {
+      position: absolute; top: 14px; right: 14px; width: 30px; height: 30px;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(4px); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; color: #fff;
+      opacity: 0; transition: opacity 0.28s, background 0.2s;
+    }
+    .portfolio-item:hover .portfolio-ext-link { opacity: 1; }
+    .portfolio-ext-link:hover { background: rgba(255,255,255,0.28); }
+
+    /* Add card */
+    .portfolio-add {
+      display: none; aspect-ratio: 4/3; border: 2px dashed var(--border);
+      background: var(--bg); align-items: center; justify-content: center;
+      flex-direction: column; gap: 9px; cursor: pointer;
+      transition: opacity 0.3s ease, border-color 0.2s, background 0.2s;
+      color: var(--text-3);
+    }
+    body.owner-mode .portfolio-add { display: flex; }
+    .portfolio-add:hover { border-color: var(--text-2); background: var(--bg2); color: var(--text-2); }
+    .portfolio-add span { font-family: var(--mono); font-size: 0.67rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* SKILLS GRID */
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border); gap: 0;
+    }
+    .skill-group { padding: 26px 22px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .skill-group:nth-child(3n) { border-right: none; }
+    .skill-group:nth-last-child(-n+3) { border-bottom: none; }
+    .skill-group-label { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-3); margin-bottom: 13px; }
+    .skill-group ul { list-style: none; }
+    .skill-group ul li {
+      font-size: 0.87rem; color: var(--text-2); padding: 5px 0;
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 9px;
+    }
+    .skill-group ul li:last-child { border-bottom: none; }
+    .skill-group ul li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+
+    /* CONTACT */
+    .contact-block { padding: 88px 0 120px; }
+    .contact-heading {
+      font-family: var(--serif); font-size: clamp(2rem, 5.5vw, 3.6rem);
+      font-weight: 400; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 28px;
+    }
+    .contact-heading em { font-style: italic; color: var(--text-2); }
+    .contact-sub { font-size: 0.95rem; color: var(--text-2); margin-bottom: 36px; max-width: 400px; line-height: 1.8; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border); padding: 26px var(--pad);
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 300; color: var(--text-3);
+    }
+    footer a:hover { color: var(--text-2); }
+
+    /* MODALS */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(26,23,20,0.45);
+      backdrop-filter: blur(6px); z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 40px; width: 100%; max-width: 460px; margin: 24px;
+      transform: translateY(14px); transition: transform 0.25s;
+      box-shadow: 0 20px 60px rgba(26,23,20,0.1);
+    }
+    .modal-overlay.active .modal { transform: translateY(0); }
+    .modal-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 6px; }
+    .modal-sub { font-size: 0.83rem; color: var(--text-2); margin-bottom: 26px; line-height: 1.6; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    .form-input, .form-textarea {
+      width: 100%; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); color: var(--text); font-family: var(--sans);
+      font-size: 0.9rem; font-weight: 300; padding: 10px 14px; outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--text-2); }
+    .form-textarea { resize: vertical; min-height: 86px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .btn {
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 400;
+      padding: 10px 20px; border-radius: var(--r); cursor: pointer; transition: all 0.2s;
+      border: 1px solid var(--border); background: transparent; color: var(--text-2);
+    }
+    .btn:hover { border-color: var(--text-2); color: var(--text); }
+    .btn-primary { background: var(--text); border-color: var(--text); color: var(--bg); }
+    .btn-primary:hover { background: #3a3530; border-color: #3a3530; color: var(--bg); }
+
+    /* ANIMATIONS */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+      .page { padding: 0 24px; }
+      .hero { padding: 120px 0 72px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .skill-group { border-right: none; }
+      .skill-group:nth-last-child(-n+3) { border-bottom: 1px solid var(--border); }
+      .skill-group:last-child { border-bottom: none; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .exp-item { grid-template-columns: 1fr; gap: 4px; }
+      footer { flex-direction: column; gap: 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <span class="nav-name">Kunal Ghosh</span>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="owner-btn" title="Owner login">⚿</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page">
+  <section class="hero">
+    <p class="hero-eyebrow">Software · Audio Engineering · Penn State</p>
+    <h1 class="hero-name">
+      Kunal Ghosh —<br>
+      <em>builder at the edge<br>of code &amp; sound.</em>
+    </h1>
+    <p class="hero-bio">
+      CS + Data Science student at <strong>Penn State</strong>, audio engineer since 2009.
+      Previously contracted at <strong>Meta Research</strong> on AI-powered audio stem separation.
+      I make things that listen, learn, and perform.
+    </p>
+    <div class="hero-links">
+      <a class="pill pill-solid" href="#work">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        See my work
+      </a>
+      <a class="pill" href="https://github.com/vllknny" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a class="pill" href="https://linkedin.com/in/vllknny" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a class="pill" href="mailto:kunalghosh2005@gmail.com">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<div class="page">
+  <section class="section reveal" id="about">
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <div>
+        <div class="about-text">
+          <p>I'm Kunal — a <strong>Computational Data Science major</strong> at Penn State's College of Engineering (expected May 2028), with minors in Economics and Artificial Intelligence.</p>
+          <p>I've been an audio engineer since 2009, working across 2,000+ movies, songs, and recordings. I contracted with <strong>Meta Research</strong> integrating transformer-based audio stem separation models into production DSP pipelines.</p>
+          <p>My work lives at the junction of signal processing, machine learning, and software engineering — drawn to problems where precision and creativity aren't opposites.</p>
+        </div>
+
+        <!-- Resume upload (owner only) -->
+        <div class="resume-upload-wrap" id="resume-upload-wrap">
+          <div class="upload-row" onclick="document.getElementById('resume-file-input').click()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <input type="file" id="resume-file-input" accept=".pdf,.doc,.docx,.txt" />
+            <div class="upload-label"><strong id="upload-filename">Click to upload resume</strong> — PDF, DOCX or TXT</div>
+          </div>
+          <button class="resume-parse-btn" id="parse-btn" onclick="parseResume()" disabled>Parse with AI →</button>
+          <div class="resume-status" id="resume-status"></div>
+        </div>
+        <button class="resume-clear-btn" onclick="clearResume()">↺ Reset to default resume</button>
+      </div>
+
+      <div class="about-sidebar">
+        <div>
+          <p class="sidebar-block-label">Education</p>
+          <div class="sidebar-item">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            <div class="sidebar-item-text">
+              <strong>Pennsylvania State University</strong>
+              B.E. Computational Data Science<br>
+              GPA 3.32 &middot; Expected May 2028<br>
+              <span style="font-size:0.8rem;color:var(--text-3);">Minors: Economics, Artificial Intelligence</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-block-label">Location</p>
+          <div class="sidebar-item">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="sidebar-item-text">Harrisburg, PA</span>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-block-label">Organisations</p>
+          <div class="sidebar-item">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="sidebar-item-text">IEEE &middot; Engineering Leadership Society &middot; HackPSU &middot; CareerPREP &middot; PSMusicGroup</span>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-block-label">Certifications</p>
+          <div class="sidebar-item">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            <span class="sidebar-item-text">AZ-900 &middot; DP-900 &middot; Six Sigma Green Belt</span>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-block-label">Contact</p>
+          <div class="sidebar-item">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:kunalghosh2005@gmail.com" class="sidebar-item-text" style="text-decoration:underline;text-underline-offset:3px;">kunalghosh2005@gmail.com</a>
+          </div>
+          <div class="sidebar-item" style="margin-top:8px;">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.06 6.06l.82-.82a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+            <span class="sidebar-item-text">+1 (717) 719-7810</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<div class="page">
+  <section class="section reveal" id="work">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">Where I've <em>worked.</em></h2>
+    <div style="height:40px"></div>
+
+    <div class="exp-list" id="exp-list">
+      <div class="exp-item">
+        <div class="exp-period">Jun 2020 –<br>Sep 2023</div>
+        <div>
+          <div class="exp-org">Meta</div>
+          <div class="exp-role">Demucs v4 / AI Engineer &middot; Contract</div>
+          <p class="exp-desc">Contracted by Meta Research to integrate ML-powered components into DSP pipelines supporting transformer-based audio stem separation models trained on the MUSDB dataset (150+ multitrack songs). Implemented CUDA-accelerated hybrid transformer architecture; developed spectrogram analysis &amp; normalization routines enabling automated feature extraction across 1,000s of audio frames per track.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">PyTorch</span>
+            <span class="exp-tag">CUDA</span>
+            <span class="exp-tag">DSP</span>
+            <span class="exp-tag">Transformers</span>
+            <span class="exp-tag">DeMucs v4</span>
+          </div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">Oct 2009 –<br>May 2024</div>
+        <div>
+          <div class="exp-org">Self Employed</div>
+          <div class="exp-role">Audio Engineer &middot; Harrisburg, PA</div>
+          <p class="exp-desc">Delivered high-reliability audio systems across 2,000+ movies, songs, and recordings under real-world latency and quality constraints. Developed deep intuition for signal behavior and complex system debugging; automated workflows through scripting and signals-based tooling.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">Signal Processing</span>
+            <span class="exp-tag">Pro Tools</span>
+            <span class="exp-tag">Automation</span>
+            <span class="exp-tag">Live Sound</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- PORTFOLIO -->
+<div class="page">
+  <section class="section reveal" id="portfolio">
+    <p class="section-label">Portfolio</p>
+    <h2 class="section-title">Projects I've <em>built.</em></h2>
+    <p class="portfolio-intro">A mix of audio engineering software, ML research tooling, and financial modelling. Hover to focus — click to open.</p>
+
+    <div class="portfolio-grid" id="portfolio-grid">
+
+      <div class="portfolio-item" onclick="window.open('https://github.com/vllknny/AQgen','_blank')">
+        <div class="portfolio-placeholder">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>AQgen</span>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-name">AQgen</div>
+          <div class="portfolio-overlay-tags">JavaScript &middot; AI/NLP &middot; Question Generation</div>
+        </div>
+        <a class="portfolio-ext-link" href="https://github.com/vllknny/AQgen" target="_blank" onclick="event.stopPropagation()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
+      </div>
+
+      <div class="portfolio-item" onclick="window.open('https://github.com/vllknny/ssampler','_blank')">
+        <div class="portfolio-placeholder">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          <span>ssampler</span>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-name">ssampler</div>
+          <div class="portfolio-overlay-tags">C++ &middot; JUCE &middot; DeMucs v4 &middot; Audio DSP</div>
+        </div>
+        <a class="portfolio-ext-link" href="https://github.com/vllknny/ssampler" target="_blank" onclick="event.stopPropagation()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
+      </div>
+
+      <div class="portfolio-item">
+        <div class="portfolio-placeholder">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>JUCE AI Platform</span>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-name">JUCE Audio Intelligence Platform</div>
+          <div class="portfolio-overlay-tags">C++ &middot; Rust &middot; Hugging Face &middot; DeMucs v4</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <div class="portfolio-placeholder">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>Topology Research</span>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-name">Topology Research Analysis</div>
+          <div class="portfolio-overlay-tags">Python &middot; Docker &middot; SciPy &middot; Data Viz</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <div class="portfolio-placeholder">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Monte Carlo Simulator</span>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-name">Monte Carlo Financial Return Simulator</div>
+          <div class="portfolio-overlay-tags">Python &middot; PyTorch &middot; yFinance &middot; Brownian Motion</div>
+        </div>
+      </div>
+
+      <!-- Add card — owner only -->
+      <div class="portfolio-add" id="portfolio-add" onclick="openPortfolioModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Add project</span>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<div class="page">
+  <section class="section reveal" id="skills">
+    <p class="section-label">Skills</p>
+    <h2 class="section-title">What I <em>work with.</em></h2>
+    <div style="height:40px"></div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <p class="skill-group-label">Languages</p>
+        <ul><li>Python</li><li>C / C++</li><li>Rust</li><li>JavaScript</li><li>R</li><li>MySQL</li></ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">ML / AI</p>
+        <ul><li>PyTorch</li><li>Keras</li><li>Pandas / NumPy</li><li>LLM Inference</li><li>Semantic Embeddings</li></ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Audio / DSP</p>
+        <ul><li>JUCE Framework</li><li>DeMucs v4</li><li>Spectrogram Analysis</li><li>CUDA Pipelines</li><li>Pro Tools / DAWs</li></ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Infrastructure</p>
+        <ul><li>Microsoft Azure</li><li>Docker</li><li>Kubernetes</li><li>MongoDB</li><li>Git / Linux</li></ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Coursework</p>
+        <ul><li>Discrete Math</li><li>Object-Oriented Programming</li><li>Data Organization</li><li>Introduction to R</li></ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Certifications</p>
+        <ul><li>AZ-900 Azure Fundamentals</li><li>DP-900 Azure Data</li><li>Six Sigma Green Belt</li></ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<div class="page">
+  <div class="contact-block reveal" id="contact">
+    <p class="section-label">Contact</p>
+    <h2 class="contact-heading">Let's build<br><em>something together.</em></h2>
+    <p class="contact-sub">Open to internships, collaborations, and anything at the intersection of audio and software. Best reached by email.</p>
+    <div class="contact-links">
+      <a class="pill pill-solid" href="mailto:kunalghosh2005@gmail.com">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        kunalghosh2005@gmail.com
+      </a>
+      <a class="pill" href="https://linkedin.com/in/vllknny" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a class="pill" href="https://github.com/vllknny" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a class="pill" href="tel:+17177197810">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.06 6.06l.82-.82a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+        +1 (717) 719-7810
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Kunal Ghosh &middot; vllknny</span>
+  <span>
+    <a href="https://github.com/vllknny" target="_blank">github.com/vllknny</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://pages.github.com" target="_blank">GitHub Pages</a>
+  </span>
+</footer>
+
+<!-- OWNER LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-title">Owner access</div>
+    <p class="modal-sub">Enter your password to unlock editing controls for this session.</p>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="owner-password" placeholder="••••••••" />
+      <div id="login-error" style="font-size:0.72rem;color:#9a5050;margin-top:6px;min-height:16px;font-family:var(--mono);"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('login-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="attemptLogin()">Unlock →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PORTFOLIO MODAL -->
+<div class="modal-overlay" id="portfolio-modal">
+  <div class="modal">
+    <div class="modal-title">Add portfolio item</div>
+    <p class="modal-sub">Upload a cover image or leave blank to use the icon placeholder. Hover the grid to focus.</p>
+    <div class="form-group">
+      <label class="form-label">Project Name</label>
+      <input class="form-input" type="text" id="p-name" placeholder="My Project" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tags / Stack</label>
+      <input class="form-input" type="text" id="p-tags" placeholder="Python, PyTorch, Audio" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link (optional)</label>
+      <input class="form-input" type="url" id="p-url" placeholder="https://github.com/vllknny/..." />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Cover Image (optional)</label>
+      <input class="form-input" type="file" id="p-img" accept="image/*" style="padding:8px 14px;cursor:pointer;" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('portfolio-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addPortfolioItem()">Add →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const OWNER_PASS = 'vllknny2024';
+const RESUME_KEY = 'vllknny_resume_v1';
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+}, { passive: true });
+
+// ── SCROLL REVEAL ──
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+// ── OWNER MODE ──
+let isOwner = sessionStorage.getItem('ownerMode') === '1';
+function applyOwnerMode() {
+  document.body.classList.toggle('owner-mode', isOwner);
+  const btn = document.getElementById('owner-btn');
+  btn.classList.toggle('active', isOwner);
+  btn.textContent = isOwner ? '⚿ owner' : '⚿';
+  btn.title = isOwner ? 'Exit owner mode' : 'Owner login';
+}
+document.getElementById('owner-btn').addEventListener('click', () => {
+  if (isOwner) { isOwner = false; sessionStorage.removeItem('ownerMode'); applyOwnerMode(); }
+  else { openModal('login-modal'); setTimeout(() => document.getElementById('owner-password').focus(), 260); }
+});
+function attemptLogin() {
+  const pw = document.getElementById('owner-password').value;
+  if (pw === OWNER_PASS) {
+    isOwner = true; sessionStorage.setItem('ownerMode', '1');
+    applyOwnerMode(); closeModal('login-modal');
+    document.getElementById('owner-password').value = '';
+    document.getElementById('login-error').textContent = '';
+  } else {
+    document.getElementById('login-error').textContent = 'Incorrect password.';
+    document.getElementById('owner-password').value = '';
+    document.getElementById('owner-password').focus();
+  }
+}
+document.getElementById('owner-password').addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+applyOwnerMode();
+
+// ── MODALS ──
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => closeModal(m.id));
+});
+function openPortfolioModal() { if (isOwner) openModal('portfolio-modal'); }
+
+// ── ADD PORTFOLIO ITEM ──
+function addPortfolioItem() {
+  const name = document.getElementById('p-name').value.trim();
+  const tags = document.getElementById('p-tags').value.trim();
+  const url  = document.getElementById('p-url').value.trim();
+  const imgFile = document.getElementById('p-img').files[0];
+  if (!name) return;
+
+  function buildCard(imgSrc) {
+    const item = document.createElement('div');
+    item.className = 'portfolio-item';
+    if (url) item.onclick = () => window.open(url, '_blank');
+
+    const visual = imgSrc
+      ? `<img src="${imgSrc}" alt="${esc(name)}" />`
+      : `<div class="portfolio-placeholder">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>${esc(name)}</span>
+        </div>`;
+
+    const extLink = url
+      ? `<a class="portfolio-ext-link" href="${esc(url)}" target="_blank" onclick="event.stopPropagation()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>` : '';
+
+    item.innerHTML = `${visual}
+      <div class="portfolio-overlay">
+        <div class="portfolio-overlay-name">${esc(name)}</div>
+        <div class="portfolio-overlay-tags">${esc(tags)}</div>
+      </div>${extLink}`;
+
+    document.getElementById('portfolio-grid').insertBefore(item, document.getElementById('portfolio-add'));
+    closeModal('portfolio-modal');
+    ['p-name','p-tags','p-url'].forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('p-img').value = '';
+  }
+
+  if (imgFile) {
+    const reader = new FileReader();
+    reader.onload = e => buildCard(e.target.result);
+    reader.readAsDataURL(imgFile);
+  } else { buildCard(null); }
+}
+
+// ── RESUME FILE HANDLING ──
+let resumeFile = null;
+const fileInput = document.getElementById('resume-file-input');
+const parseBtn  = document.getElementById('parse-btn');
+const statusEl  = document.getElementById('resume-status');
+
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+const wrap = document.getElementById('resume-upload-wrap');
+wrap.addEventListener('dragover', e => { e.preventDefault(); wrap.classList.add('drag'); });
+wrap.addEventListener('dragleave', () => wrap.classList.remove('drag'));
+wrap.addEventListener('drop', e => { e.preventDefault(); wrap.classList.remove('drag'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+
+function handleFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!['pdf','doc','docx','txt'].includes(ext)) { setStatus('Use PDF, DOCX, or TXT.', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const base64 = reader.result.split(',')[1];
+    let mt = ext === 'pdf' ? 'application/pdf' : ext === 'txt' ? 'text/plain' : 'application/octet-stream';
+    resumeFile = { base64, mediaType: mt, ext, name: file.name };
+    document.getElementById('upload-filename').textContent = '✓ ' + file.name;
+    parseBtn.disabled = false; setStatus('');
+  };
+  reader.readAsDataURL(file);
+}
+function setStatus(msg, type) {
+  statusEl.textContent = msg;
+  statusEl.className = 'resume-status' + (type ? ' ' + type : '');
+}
+
+// ── PARSE RESUME VIA API ──
+async function parseResume() {
+  if (!resumeFile) return;
+  parseBtn.disabled = true;
+  setStatus('Parsing with AI…', 'loading');
+  const sys = `You are a resume parser. Return ONLY valid JSON, no markdown fences. Schema:
+{"experience":[{"org":"","role":"","period":"","desc":"","tags":[]}],"education":[{"org":"","role":"","period":"","desc":""}],"skills":[""]}
+Reverse chronological. Skills max 20. Return only JSON.`;
+  const content = resumeFile.ext === 'pdf'
+    ? [{ type:'document', source:{ type:'base64', media_type:'application/pdf', data:resumeFile.base64 }},{ type:'text', text:'Parse this resume.' }]
+    : `Parse this resume:\n${atob(resumeFile.base64)}`;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1200, system:sys, messages:[{role:'user',content}] })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const raw = (data.content||[]).map(b=>b.text||'').join('').trim().replace(/^```(?:json)?|```$/gm,'').trim();
+    const parsed = JSON.parse(raw);
+    localStorage.setItem(RESUME_KEY, JSON.stringify(parsed));
+    applyResume(parsed);
+    setStatus('✓ Resume updated.', 'success');
+  } catch(err) { setStatus('Error: ' + err.message, 'error'); parseBtn.disabled = false; }
+}
+
+function clearResume() {
+  localStorage.removeItem(RESUME_KEY);
+  applyResume(BAKED);
+  resumeFile = null;
+  document.getElementById('upload-filename').textContent = 'Click to upload resume';
+  fileInput.value = ''; parseBtn.disabled = true;
+  setStatus('Reset to default.');
+}
+
+// ── RENDER EXPERIENCE FROM DATA ──
+function applyResume(data) {
+  if (!data || !data.experience) return;
+  document.getElementById('exp-list').innerHTML = data.experience.map(e => `
+    <div class="exp-item">
+      <div class="exp-period">${esc((e.period||'').replace('–','–<br>'))}</div>
+      <div>
+        <div class="exp-org">${esc(e.org)}</div>
+        <div class="exp-role">${esc(e.role)}</div>
+        <p class="exp-desc">${esc(e.desc)}</p>
+        ${e.tags && e.tags.length ? `<div class="exp-tags">${e.tags.map(t=>`<span class="exp-tag">${esc(t)}</span>`).join('')}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── BAKED RESUME ──
+const BAKED = {
+  experience: [
+    { org:'Meta', role:'Demucs v4 / AI Engineer · Contract', period:'Jun 2020 – Sep 2023',
+      desc:'Contracted by Meta Research to integrate ML-powered components into DSP pipelines supporting transformer-based audio stem separation models trained on the MUSDB dataset (150+ multitrack songs). Implemented CUDA-accelerated hybrid transformer architecture; developed spectrogram analysis & normalization routines enabling automated feature extraction across 1,000s of audio frames per track.',
+      tags:['PyTorch','CUDA','DSP','Transformers','DeMucs v4'] },
+    { org:'Self Employed', role:'Audio Engineer · Harrisburg, PA', period:'Oct 2009 – May 2024',
+      desc:'Delivered high-reliability audio systems across 2,000+ movies, songs, and recordings under real-world latency and quality constraints. Developed deep intuition for signal behavior and complex system debugging; automated workflows through scripting and signals-based tooling.',
+      tags:['Signal Processing','Pro Tools','Automation','Live Sound'] }
+  ]
+};
+
+// ── INIT ──
+(function() {
+  try { const s = localStorage.getItem(RESUME_KEY); if (s) applyResume(JSON.parse(s)); }
+  catch(e) { /* use baked HTML */ }
+})();
+</script>
+</body>
+</html>
