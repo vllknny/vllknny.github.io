@@ -161,12 +161,38 @@
     body.owner-mode .resume-clear-btn { display: inline-block; }
 
     /* EXPERIENCE */
-    .exp-list { display: flex; flex-direction: column; }
+    .exp-list { display: flex; flex-direction: column; position: relative; padding-left: 24px; }
+    .exp-list::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 1px;
+      background: var(--border);
+    }
     .exp-item {
       display: grid; grid-template-columns: 120px 1fr; gap: 32px;
-      padding: 32px 0; border-bottom: 1px solid var(--border);
+      padding: 32px 0; border-bottom: none;
+      position: relative;
     }
-    .exp-item:first-child { border-top: 1px solid var(--border); }
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      left: -30px;
+      top: 44px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .exp-item:hover::before {
+      border-color: var(--text-2);
+      background: var(--text-2);
+    }
+    .exp-item:first-child { border-top: none; }
     .exp-period { font-family: var(--mono); font-size: 0.67rem; font-weight: 300; color: var(--text-3); line-height: 1.7; padding-top: 4px; }
     .exp-org { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; margin-bottom: 2px; }
     .exp-role { font-size: 0.84rem; color: var(--text-2); margin-bottom: 10px; font-weight: 400; }
@@ -308,6 +334,75 @@
     .btn:hover { border-color: var(--text-2); color: var(--text); }
     .btn-primary { background: var(--text); border-color: var(--text); color: var(--bg); }
     .btn-primary:hover { background: #3a3530; border-color: #3a3530; color: var(--bg); }
+
+    /* IMAGE SELECTOR */
+    .image-selector {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+      align-items: start; width: 100%; max-width: 900px;
+    }
+    .selector-preview {
+      aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+      border: 1px solid var(--border); background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .selector-preview img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .selector-preview-placeholder {
+      width: 100%; height: 100%; display: flex;
+      align-items: center; justify-content: center;
+      background: var(--bg2); color: var(--text-3);
+      font-family: var(--mono); font-size: 0.8rem;
+    }
+    .selector-list {
+      display: flex; flex-direction: column; gap: 0;
+      border: 1px solid var(--border);
+      max-height: 400px; overflow-y: auto;
+    }
+    .selector-item {
+      display: grid; grid-template-columns: 40px 1fr 60px;
+      align-items: center; gap: 12px; padding: 14px 16px;
+      border-bottom: 1px solid var(--border); cursor: pointer;
+      transition: background 0.2s; background: var(--surface);
+    }
+    .selector-item:last-child { border-bottom: none; }
+    .selector-item:hover { background: var(--bg2); }
+    .selector-item.active {
+      background: var(--text-3); color: var(--surface);
+    }
+    .selector-item.active .selector-label {
+      color: var(--surface);
+    }
+    .selector-item.active .selector-meta {
+      color: rgba(255,255,255,0.7);
+    }
+    .selector-play {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.2s;
+      cursor: pointer; color: var(--text-3);
+    }
+    .selector-item:hover .selector-play {
+      border-color: var(--text-2); color: var(--text-2);
+    }
+    .selector-item.active .selector-play {
+      border-color: var(--surface); color: var(--surface);
+    }
+    .selector-info { display: flex; flex-direction: column; gap: 2px; }
+    .selector-label {
+      font-size: 0.87rem; font-weight: 400; color: var(--text);
+    }
+    .selector-meta {
+      font-size: 0.72rem; font-family: var(--mono); color: var(--text-3);
+    }
+    .selector-value {
+      font-size: 0.78rem; font-family: var(--mono); color: var(--text-2);
+      text-align: right;
+    }
+    .selector-item.active .selector-value {
+      color: var(--surface);
+    }
 
     /* ANIMATIONS */
     @keyframes up {
@@ -707,6 +802,67 @@
   </div>
 </div>
 
+<!-- IMAGE SELECTOR DEMO -->
+<div class="page" style="padding-top:88px;padding-bottom:88px;">
+  <div class="image-selector" id="image-selector">
+    <div class="selector-preview">
+      <div class="selector-preview-placeholder">Select an item</div>
+    </div>
+    <div class="selector-list" id="selector-list">
+      <div class="selector-item active" onclick="selectImage(this, 'Project Alpha', 'Audio DSP')">
+        <div class="selector-play">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+        </div>
+        <div class="selector-info">
+          <div class="selector-label">Project Alpha</div>
+          <div class="selector-meta">Audio DSP</div>
+        </div>
+        <div class="selector-value">3.2min</div>
+      </div>
+      <div class="selector-item" onclick="selectImage(this, 'Machine Learning', 'Neural Nets')">
+        <div class="selector-play">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+        </div>
+        <div class="selector-info">
+          <div class="selector-label">Machine Learning</div>
+          <div class="selector-meta">Neural Nets</div>
+        </div>
+        <div class="selector-value">1.8min</div>
+      </div>
+      <div class="selector-item" onclick="selectImage(this, 'Full Stack Build', 'React + Node')">
+        <div class="selector-play">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+        </div>
+        <div class="selector-info">
+          <div class="selector-label">Full Stack Build</div>
+          <div class="selector-meta">React + Node</div>
+        </div>
+        <div class="selector-value">4.5min</div>
+      </div>
+      <div class="selector-item" onclick="selectImage(this, 'Data Analysis', 'Python & Viz')">
+        <div class="selector-play">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+        </div>
+        <div class="selector-info">
+          <div class="selector-label">Data Analysis</div>
+          <div class="selector-meta">Python & Viz</div>
+        </div>
+        <div class="selector-value">2.1min</div>
+      </div>
+      <div class="selector-item" onclick="selectImage(this, 'Cloud Infrastructure', 'AWS & Docker')">
+        <div class="selector-play">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+        </div>
+        <div class="selector-info">
+          <div class="selector-label">Cloud Infrastructure</div>
+          <div class="selector-meta">AWS & Docker</div>
+        </div>
+        <div class="selector-value">2.7min</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── CONFIG ──
 const OWNER_PASS = 'vllknny2024';
@@ -902,6 +1058,32 @@ const BAKED = {
       tags:['Signal Processing','Pro Tools','Automation','Live Sound'] }
   ]
 };
+
+// ── IMAGE SELECTOR ──
+function selectImage(el, name, category) {
+  // Remove active class from all items
+  document.querySelectorAll('.selector-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  // Add active class to clicked item
+  el.classList.add('active');
+  
+  // Update preview with a gradient based on the selected item
+  const preview = document.querySelector('.selector-preview');
+  const colors = [
+    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+  ];
+  const itemIndex = Array.from(document.querySelectorAll('.selector-item')).indexOf(el);
+  preview.style.background = colors[itemIndex % colors.length];
+  preview.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;">
+    <div style="font-family:var(--serif);font-size:1.8rem;font-weight:400;">${name}</div>
+    <div style="font-family:var(--mono);font-size:0.8rem;opacity:0.8;">${category}</div>
+  </div>`;
+}
 
 // ── INIT ──
 (function() {
