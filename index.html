@@ -1,1248 +1,1001 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kunal Ghosh — vllknny</title>
-  <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/104706563?v=4" />
-  <link rel="apple-touch-icon" href="https://avatars.githubusercontent.com/u/104706563?v=4" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #080a0e;
-      --surface: #0e1219;
-      --card: #121820;
-      --border: #1e2535;
-      --accent: #c8f060;
-      --accent2: #60c8f0;
-      --muted: #4a5568;
-      --text: #d6dce8;
-      --text-dim: #8892a4;
-      --font-display: 'Syne', sans-serif;
-      --font-mono: 'DM Mono', monospace;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>Kunal Ghosh — vllknny</title>
+<meta name="description" content="Kunal Ghosh — computational data science, audio engineering, DSP and machine learning. A vault of notes, projects and READMEs." />
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/104706563?v=4" />
+<link rel="apple-touch-icon" href="https://avatars.githubusercontent.com/u/104706563?v=4" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+:root{
+  --r0:#1b1a19;          /* ribbon, tab bar */
+  --r1:#262422;          /* sidebar */
+  --r2:#212121;          /* editor */
+  --border:#363330;
+  --hover:rgba(255,245,230,.06);
+  --active:rgba(255,245,230,.10);
+  --text:#dcdad6;
+  --muted:#9a948d;
+  --faint:#6d6862;
+  --accent:#8b7cf6;      /* obsidian purple */
+  --accent-soft:rgba(139,124,246,.16);
+  --link:#6fae5c;        /* external links, as in the vault */
+  --ilink:#a99cf7;       /* internal links */
+  --code:#2a2826;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--r0);color:var(--text);font:14px/1.6 var(--mono);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:inherit}
+.ic{flex:none;display:block}
+::selection{background:rgba(139,124,246,.35)}
+*{scrollbar-width:thin;scrollbar-color:#45413d transparent}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+.app{display:flex;height:100vh;height:100dvh}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 14px;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
+/* ── ribbon ── */
+.ribbon{width:44px;flex:none;background:var(--r0);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px;border-right:1px solid var(--border)}
+.ribbon .sp{flex:1}
+.rbtn{width:32px;height:32px;border-radius:6px;display:grid;place-items:center;color:var(--muted);cursor:pointer;border:0;background:none;text-decoration:none}
+.rbtn:hover{background:var(--hover);color:var(--text)}
+.rbtn.on{background:var(--active);color:var(--text)}
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
-    }
+/* ── sidebar ── */
+.sidebar{width:268px;flex:none;background:var(--r1);display:flex;flex-direction:column;border-right:1px solid var(--border);min-width:0}
+.vault{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;font-weight:500}
+.vault small{color:var(--faint);font-weight:400;margin-left:auto}
+.editbar{display:none;gap:4px;padding:2px 10px 8px;flex-wrap:wrap}
+body.editing .editbar{display:flex}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:6px;background:var(--hover);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px}
+.chip:hover{color:var(--text);border-color:#4a4642}
+.tree{flex:1;overflow:auto;padding:4px 8px 16px}
+.row{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:6px;cursor:pointer;color:var(--muted);white-space:nowrap;text-decoration:none;user-select:none}
+.row span.l{overflow:hidden;text-overflow:ellipsis;flex:1}
+.row:hover{background:var(--hover);color:var(--text)}
+.row.active{background:var(--active);color:var(--text)}
+.row .chev{transition:transform .15s}
+.row.open .chev{transform:rotate(90deg)}
+.row.folder{color:var(--text)}
+.kids{margin-left:14px;border-left:1px solid var(--border);padding-left:2px}
+.kids[hidden]{display:none}
+.side-foot{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border);color:var(--faint);font-size:12px}
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(200,240,96,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,240,96,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
+/* ── main ── */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--r2);position:relative}
+.tabbar{display:flex;align-items:flex-end;background:var(--r0);height:42px;padding:0 8px;border-bottom:1px solid var(--border);gap:2px}
+.tabs{display:flex;align-items:flex-end;gap:2px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:8px;padding:0 8px 0 11px;height:34px;border-radius:8px 8px 0 0;color:var(--muted);max-width:200px;min-width:90px;cursor:pointer;white-space:nowrap;flex:none}
+.tab:hover{background:var(--hover)}
+.tab.on{background:var(--r2);color:var(--text);box-shadow:inset 0 2px 0 var(--accent)}
+.tab .t{overflow:hidden;text-overflow:ellipsis;flex:1}
+.tab .x{display:grid;place-items:center;width:20px;height:20px;border-radius:5px;border:0;background:none;color:var(--faint);cursor:pointer;opacity:0}
+.tab:hover .x,.tab.on .x{opacity:1}
+.tab .x:hover{background:var(--active);color:var(--text)}
+.tabbar .rbtn{height:30px;margin-bottom:2px}
+.editflag{display:none;align-self:center;margin:0 6px;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:#c1b8fa;font-size:11px;letter-spacing:.06em}
+body.editing .editflag{display:inline-block}
+.vhead{display:flex;align-items:center;height:42px;padding:0 12px;gap:4px;color:var(--muted);flex:none}
+.crumbs{flex:1;min-width:0;display:flex;align-items:center;gap:8px;padding-left:6px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.crumbs b{color:var(--text);font-weight:500}
+.crumbs i{font-style:normal;color:var(--faint)}
+.scroll{flex:1;overflow:auto;min-height:0;position:relative}
+.note{max-width:780px;margin:0 auto;padding:26px 44px 140px}
+.inline-title{font-size:1.95rem;line-height:1.25;font-weight:700;margin:0 0 16px;letter-spacing:-.01em;word-break:break-word}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 48px;
-      backdrop-filter: blur(20px);
-      background: rgba(8,10,14,0.7);
-      border-bottom: 1px solid var(--border);
-    }
+/* properties */
+.props{border:1px solid var(--border);border-radius:10px;padding:6px 14px;margin:0 0 24px;background:rgba(255,255,255,.015)}
+.prow{display:grid;grid-template-columns:112px 1fr;gap:10px;padding:5px 0;align-items:center;font-size:13px}
+.pk{color:var(--faint);display:flex;align-items:center;gap:7px}
+.pv{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-block;background:var(--accent-soft);color:#bdb4fa;border-radius:999px;padding:0 10px;margin:2px 4px 2px 0;font-size:12px;text-decoration:none;cursor:pointer;line-height:1.6}
+.pill:hover{background:rgba(139,124,246,.28)}
 
-    .nav-logo {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 18px;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-    }
+/* markdown */
+.md{font-size:14.5px;line-height:1.8;overflow-wrap:break-word}
+.md>*:first-child{margin-top:0}
+.md h1,.md h2,.md h3,.md h4,.md h5,.md h6{line-height:1.3;margin:1.7em 0 .55em;font-weight:700}
+.md h1{font-size:1.7rem}.md h2{font-size:1.38rem}.md h3{font-size:1.14rem}.md h4{font-size:1rem}.md h5,.md h6{font-size:.92rem;color:var(--muted)}
+.md p{margin:.8em 0}
+.md a{color:var(--link);text-underline-offset:3px;text-decoration-thickness:1px}
+.md a.wikilink{color:var(--ilink)}
+.md a.ext::after{content:"↗";font-size:.78em;margin-left:3px;opacity:.7}
+.md .wikilink.unresolved{color:var(--faint);text-decoration:underline dotted;cursor:help}
+.md ul,.md ol{padding-left:1.5em;margin:.7em 0}
+.md li{margin:.25em 0}
+.md li::marker{color:var(--faint)}
+.md li>input[type=checkbox]{margin-right:8px;accent-color:var(--accent)}
+.md hr{border:0;border-top:1px solid var(--border);margin:2em 0}
+.md blockquote{margin:1em 0;padding:.1em 1em;border-left:3px solid var(--accent);color:var(--muted)}
+.md img{max-width:100%;height:auto;border-radius:6px}
+.md code{background:var(--code);padding:.12em .42em;border-radius:5px;font-size:.88em}
+.md pre{position:relative;background:var(--code);border:1px solid var(--border);border-radius:10px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.65;margin:1.1em 0}
+.md pre code{background:none;padding:0;font-size:inherit}
+.md pre .copy{position:absolute;top:8px;right:8px;opacity:0;background:var(--r1);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer}
+.md pre:hover .copy{opacity:1}
+.md .tbl{overflow:auto;margin:1em 0}
+.md table{border-collapse:collapse;width:100%;font-size:13.5px}
+.md th,.md td{border:1px solid var(--border);padding:7px 12px;text-align:left;vertical-align:top}
+.md th{background:rgba(255,255,255,.03);font-weight:500}
+.md details{border:1px solid var(--border);border-radius:8px;padding:6px 14px;margin:1em 0}
+.md summary{cursor:pointer;color:var(--muted)}
+.md kbd{background:var(--code);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:0 6px;font-size:.85em}
+.hljs-keyword,.hljs-selector-tag,.hljs-literal,.hljs-built_in{color:#c3a6ff}
+.hljs-string,.hljs-regexp,.hljs-addition{color:#8fc47c}
+.hljs-number,.hljs-attr,.hljs-variable,.hljs-template-variable{color:#e5a86b}
+.hljs-title,.hljs-section,.hljs-function .hljs-title{color:#7fb4f0}
+.hljs-comment,.hljs-quote,.hljs-meta{color:#7d776f;font-style:italic}
+.hljs-type,.hljs-class .hljs-title,.hljs-symbol,.hljs-bullet{color:#e0cd7e}
+.hljs-deletion{color:#e57c7c}
 
-    .nav-right { display: flex; align-items: center; gap: 32px; }
+/* callouts */
+.callout{--c:68,138,255;border-radius:10px;padding:12px 16px;margin:1.2em 0;background:rgba(var(--c),.1);overflow:hidden}
+.callout-title{display:flex;align-items:center;gap:9px;font-weight:500;color:rgb(var(--c))}
+.callout-content{margin-top:6px;color:var(--text)}
+.callout-content>*:first-child{margin-top:0}.callout-content>*:last-child{margin-bottom:0}
 
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a {
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--accent); }
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px 18px;margin-top:22px}
+.gallery:hover .gi,.gallery:hover .gadd{opacity:.32;filter:saturate(.5)}
+.gallery .gi:hover,.gallery .gadd:hover{opacity:1;filter:none}
+.gi{position:relative;cursor:pointer;transition:opacity .3s ease,filter .3s ease;text-decoration:none;color:inherit;display:block}
+.thumb{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--r1)}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:0;transition:transform .55s ease;display:block}
+.gi:hover .thumb img,.gi:hover .ph{transform:scale(1.05)}
+.ph{position:absolute;inset:0;display:grid;place-items:center;transition:transform .55s ease;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:14px 14px}
+.ph b{font-size:2.6rem;font-weight:700;color:rgba(255,255,255,.16);letter-spacing:.04em}
+.shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,13,12,.82),transparent 58%);opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:12px;font-size:12px;color:#e8e4de}
+.gi:hover .shade{opacity:1}
+.cap{padding:9px 2px 0}
+.cap b{display:block;font-weight:500}
+.cap span{color:var(--faint);font-size:12.5px;display:block}
+.gtools{position:absolute;top:8px;right:8px;display:none;gap:4px;z-index:3}
+body.editing .gtools{display:flex}
+.gtools button{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:rgba(27,26,25,.9);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.gtools button:hover{color:var(--text)}
+.gadd{display:none;aspect-ratio:4/3;border:1.5px dashed #4a4642;border-radius:12px;place-items:center;align-content:center;gap:8px;color:var(--faint);cursor:pointer;background:none;font-size:12.5px;transition:opacity .3s,filter .3s}
+body.editing .gadd{display:grid}
+.gadd:hover{color:var(--text);border-color:var(--muted)}
 
-    #owner-btn {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      padding: 5px 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    #owner-btn:hover { border-color: var(--accent); color: var(--accent); }
-    #owner-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.06); }
+/* right panel */
+.right{width:264px;flex:none;background:var(--r2);border-left:1px solid var(--border);display:flex;flex-direction:column;min-width:0}
+.rhead{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);height:42px;align-items:center}
+.rlist{flex:1;overflow:auto;padding:10px 8px 60px}
+.rtitle{padding:2px 10px 8px;color:var(--faint);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.tagrow{display:flex;justify-content:space-between;gap:10px;padding:5px 12px;border-radius:6px;cursor:pointer;color:var(--muted)}
+.tagrow:hover{background:var(--hover);color:var(--text)}
+.tagrow em{font-style:normal;color:var(--faint)}
+.orow{padding:4px 10px;border-radius:6px;cursor:pointer;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow:hover{background:var(--hover);color:var(--text)}
+.empty{padding:14px;color:var(--faint);font-size:13px}
 
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 120px 48px 80px;
-    }
+/* status */
+.status{position:fixed;right:12px;bottom:10px;display:flex;gap:14px;align-items:center;font-size:12px;color:var(--muted);background:rgba(27,26,25,.88);padding:4px 12px;border-radius:8px;border:1px solid var(--border);backdrop-filter:blur(6px);z-index:20}
 
-    .hero-inner { max-width: 900px; }
+/* modal */
+.mbg{position:fixed;inset:0;background:rgba(10,9,9,.62);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:9vh 16px 16px;overflow:auto}
+.modal{width:100%;max-width:560px;background:var(--r1);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.5);overflow:hidden}
+.mhead{padding:16px 20px 4px;font-weight:700;font-size:1.05rem}
+.mbody{padding:10px 20px 4px}
+.mfoot{display:flex;gap:8px;justify-content:flex-end;padding:14px 20px 18px}
+.sw-in{width:100%;border:0;border-bottom:1px solid var(--border);background:none;color:var(--text);font:inherit;font-size:15px;padding:16px 20px;outline:none}
+.sw-list{max-height:52vh;overflow:auto;padding:6px}
+.sw-item{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--muted)}
+.sw-item small{margin-left:auto;color:var(--faint)}
+.sw-item.sel{background:var(--active);color:var(--text)}
+label.f{display:block;margin:12px 0 4px;color:var(--faint);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.inp,.ta,select.inp{width:100%;background:var(--r0);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font:inherit;font-size:13.5px;outline:none}
+.inp:focus,.ta:focus{border-color:var(--accent)}
+.ta{min-height:170px;resize:vertical;line-height:1.6}
+.btn{padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:var(--r0);color:var(--text);cursor:pointer}
+.btn:hover{border-color:#4f4a46}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#14112b;font-weight:700}
+.btn.danger:hover{border-color:#c4566a;color:#e98a9a}
+.rp{display:flex;align-items:flex-start;gap:12px;padding:9px 6px;border-bottom:1px solid var(--border);cursor:pointer}
+.rp:last-child{border:0}
+.rp input{margin-top:5px;accent-color:var(--accent)}
+.rp small{display:block;color:var(--faint);font-size:12px}
+.rp .meta{margin-left:auto;color:var(--faint);font-size:12px;white-space:nowrap}
+.rplist{max-height:40vh;overflow:auto;margin:6px 0}
+.hint{color:var(--faint);font-size:12.5px;margin:8px 0}
+.toast{position:fixed;left:50%;bottom:54px;transform:translateX(-50%);background:var(--r1);border:1px solid var(--border);padding:9px 16px;border-radius:10px;z-index:200;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:90vw}
 
-    .hero-tag {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 4px 12px;
-      margin-bottom: 32px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.2s;
-    }
+/* graph */
+.graph{position:absolute;inset:0}
+.graph canvas{width:100%;height:100%;display:block}
+.glegend{position:absolute;left:16px;top:14px;color:var(--faint);font-size:12px;display:flex;gap:14px;pointer-events:none}
+.glegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
 
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(56px, 10vw, 120px);
-      font-weight: 800;
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      margin-bottom: 8px;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.35s;
-    }
-    .hero-name span { color: var(--accent); }
+.skel{height:12px;border-radius:6px;background:linear-gradient(90deg,#2a2826,#34312e,#2a2826);background-size:200% 100%;animation:sh 1.2s infinite;margin:14px 0}
+@keyframes sh{to{background-position:-200% 0}}
 
-    .hero-handle {
-      font-size: 16px;
-      color: var(--text-dim);
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.5s;
-    }
-
-    .hero-bio {
-      max-width: 560px;
-      font-size: 15px;
-      color: var(--text-dim);
-      line-height: 1.8;
-      margin-bottom: 48px;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.65s;
-    }
-    .hero-bio strong { color: var(--text); font-weight: 500; }
-
-    .hero-links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.8s;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-primary { background: var(--accent); color: #080a0e; font-weight: 500; }
-    .btn-primary:hover { background: #d4f472; transform: translateY(-2px); }
-    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-
-    /* ── WAVEFORM ── */
-    .waveform {
-      position: absolute;
-      right: 48px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      height: 200px;
-      opacity: 0.15;
-    }
-    .waveform-bar {
-      width: 3px;
-      background: var(--accent);
-      border-radius: 2px;
-      animation: wave 1.2s ease-in-out infinite;
-    }
-    @keyframes wave {
-      0%, 100% { transform: scaleY(0.3); }
-      50% { transform: scaleY(1); }
-    }
-
-    /* ── SECTIONS ── */
-    section {
-      position: relative;
-      z-index: 1;
-      padding: 80px 48px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      max-width: 60px;
-      height: 1px;
-      background: var(--accent);
-      opacity: 0.4;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 48px;
-      color: var(--text);
-    }
-
-    /* ── PROJECTS ── */
-    #projects { border-top: 1px solid var(--border); }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1px;
-      background: var(--border);
-    }
-
-    .project-card {
-      background: var(--card);
-      padding: 32px;
-      transition: background 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .project-card:hover { background: #161e2a; }
-    .project-card:hover .project-arrow { transform: translate(3px, -3px); }
-
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-
-    .project-icon {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: var(--accent);
-    }
-
-    .project-arrow { font-size: 18px; color: var(--muted); transition: transform 0.2s; }
-    .project-name { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-    .project-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 24px; }
-    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-
-    .tag {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-    }
-    .tag-accent { border-color: rgba(200,240,96,0.3); color: var(--accent); }
-
-    /* ADD CARD — shown only in owner mode */
-    .project-card-add {
-      background: var(--card);
-      padding: 32px;
-      border: 2px dashed var(--border);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-height: 220px;
-      display: none; /* hidden by default */
-    }
-    .project-card-add:hover { border-color: var(--accent); background: #161e2a; }
-    .project-card-add:hover .add-icon { color: var(--accent); }
-    .add-icon { font-size: 28px; color: var(--muted); transition: color 0.2s; }
-    .add-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
-
-    body.owner-mode .project-card-add { display: flex; }
-
-    /* ── SKILLS ── */
-    #skills { border-top: 1px solid var(--border); }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1px;
-      background: var(--border);
-    }
-
-    .skill-cell { background: var(--card); padding: 24px; }
-    .skill-category { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-    .skill-list { list-style: none; }
-    .skill-list li { font-size: 13px; color: var(--text-dim); padding: 4px 0; border-bottom: 1px solid rgba(30,37,53,0.5); }
-    .skill-list li:last-child { border-bottom: none; }
-
-    /* ── ABOUT + RESUME ── */
-    #about {
-      border-top: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .about-text p { font-size: 14px; color: var(--text-dim); line-height: 1.9; margin-bottom: 16px; }
-    .about-text p strong { color: var(--accent); font-weight: 400; }
-
-    /* ── RESUME PANEL ── */
-    .resume-panel { display: flex; flex-direction: column; gap: 0; }
-
-    /* Upload zone — toggled visible in owner mode */
-    .resume-upload-wrap {
-      display: none;
-      flex-direction: column;
-      gap: 1px;
-      margin-bottom: 1px;
-    }
-    body.owner-mode .resume-upload-wrap { display: flex; }
-
-    .resume-upload-zone {
-      border: 2px dashed var(--border);
-      padding: 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: var(--card);
-      position: relative;
-    }
-    .resume-upload-zone:hover { border-color: var(--accent); }
-    .resume-upload-zone.dragging { border-color: var(--accent); background: rgba(200,240,96,0.04); }
-
-    #resume-file-input { display: none; }
-
-    .upload-icon { font-size: 20px; margin-bottom: 6px; color: var(--muted); }
-    .upload-text { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
-    .upload-text strong { color: var(--accent); font-weight: 400; }
-    #upload-filename { margin-top: 8px; font-size: 11px; color: var(--accent); min-height: 16px; }
-
-    .resume-parse-btn {
-      width: 100%;
-      padding: 12px;
-      background: var(--accent);
-      border: none;
-      color: #080a0e;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .resume-parse-btn:hover { background: #d4f472; }
-    .resume-parse-btn:disabled { opacity: 0.45; cursor: not-allowed; background: var(--accent); }
-
-    .resume-status {
-      font-size: 11px;
-      color: var(--text-dim);
-      padding: 6px 0;
-      letter-spacing: 0.08em;
-      min-height: 22px;
-    }
-    .resume-status.loading { color: var(--accent2); }
-    .resume-status.error { color: #f06060; }
-    .resume-status.success { color: var(--accent); }
-
-    /* Resume display */
-    .resume-content { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
-    .resume-block { background: var(--card); padding: 22px 24px; }
-    .resume-block-title {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
-    .resume-entries { display: flex; flex-direction: column; gap: 16px; }
-    .resume-entry-org { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-    .resume-entry-meta { font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; margin-bottom: 4px; }
-    .resume-entry-desc { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
-
-    .resume-skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-    .resume-skill-tag {
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      background: var(--bg);
-    }
-
-    .resume-empty {
-      background: var(--card);
-      padding: 36px 24px;
-      text-align: center;
-      color: var(--text-dim);
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    .resume-clear-btn {
-      display: none;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      background: none;
-      border: 1px solid var(--border);
-      padding: 6px 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 10px;
-      width: 100%;
-    }
-    .resume-clear-btn:hover { color: #f06060; border-color: #f06060; }
-    body.owner-mode .resume-clear-btn { display: block; }
-
-    /* ── CONTACT ── */
-    #contact { border-top: 1px solid var(--border); text-align: center; padding: 100px 48px; }
-    #contact .section-label { justify-content: center; }
-    #contact .section-label::after { display: none; }
-
-    .contact-heading {
-      font-family: var(--font-display);
-      font-size: clamp(36px, 6vw, 80px);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 24px;
-    }
-    .contact-heading span { color: var(--accent); }
-    .contact-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 48px; }
-    .contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 24px 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      color: var(--muted);
-    }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--accent); }
-
-    /* ── MODALS ── */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(8,10,14,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .modal-overlay.active { opacity: 1; pointer-events: all; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 40px;
-      width: 100%;
-      max-width: 520px;
-      margin: 24px;
-      transform: translateY(20px);
-      transition: transform 0.25s;
-    }
-    .modal-overlay.active .modal { transform: translateY(0); }
-
-    .modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-    .modal-subtitle { font-size: 12px; color: var(--text-dim); margin-bottom: 28px; line-height: 1.6; }
-
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-
-    .form-input, .form-textarea {
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 13px;
-      padding: 12px 16px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
-    .form-textarea { resize: vertical; min-height: 100px; }
-
-    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-cancel:hover { border-color: var(--muted); }
-    .btn-submit {
-      background: var(--accent);
-      border: none;
-      color: #080a0e;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: background 0.2s;
-      letter-spacing: 0.08em;
-    }
-    .btn-submit:hover { background: #d4f472; }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      .hero { padding: 100px 24px 60px; }
-      .waveform { display: none; }
-      section { padding: 60px 24px; }
-      #about { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
-      footer { flex-direction: column; gap: 8px; padding: 20px 24px; }
-      #contact { padding: 60px 24px; }
-    }
-  </style>
+body.no-side .sidebar{display:none}
+body.no-right .right{display:none}
+.only-mobile{display:none}
+@media (max-width:1100px){.right{display:none}}
+@media (max-width:760px){
+  .ribbon{display:none}
+  .only-mobile{display:grid}
+  .sidebar{position:fixed;z-index:60;left:0;top:0;bottom:0;transform:translateX(-102%);transition:transform .2s;box-shadow:0 0 40px rgba(0,0,0,.6)}
+  body.side-open .sidebar{transform:none}
+  body.no-side .sidebar{display:flex}
+  .note{padding:20px 20px 120px}
+  .inline-title{font-size:1.55rem}
+  .prow{grid-template-columns:90px 1fr}
+  .status{left:12px;right:12px;justify-content:space-between}
+  .mbg{padding-top:4vh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">vllknny</div>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button id="owner-btn" title="Owner login">⚿</button>
+<noscript><p style="padding:2rem">This site is a small notes app and needs JavaScript. Source: github.com/vllknny</p></noscript>
+<div class="app">
+  <nav class="ribbon" id="ribbon" aria-label="Ribbon"></nav>
+  <aside class="sidebar" id="sidebar" aria-label="File explorer">
+    <div class="vault" id="vault"></div>
+    <div class="editbar" id="editbar"></div>
+    <div class="tree" id="tree"></div>
+    <div class="side-foot" id="sidefoot"></div>
+  </aside>
+  <section class="main">
+    <div class="tabbar">
+      <button class="rbtn only-mobile" id="mmenu" title="Files" aria-label="Files"></button>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <span class="editflag">EDIT</span>
+      <button class="rbtn" id="newtab" title="Quick switcher (Ctrl/Cmd+O)" aria-label="Quick switcher"></button>
+      <button class="rbtn" id="rtoggle" title="Toggle right panel" aria-label="Toggle right panel"></button>
     </div>
-  </nav>
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-inner">
-      <div class="hero-tag">Comp. Data Science · Audio Engineering</div>
-      <h1 class="hero-name">Kunal<br/><span>Ghosh</span></h1>
-      <div class="hero-handle">@vllknny · Penn State · Harrisburg, PA</div>
-      <p class="hero-bio">
-        CS + Data Science student building at the intersection of
-        <strong>audio engineering</strong> and <strong>software development</strong>.
-        17+ years behind the boards — now I write the code that shapes the sound.
-      </p>
-      <div class="hero-links">
-        <a class="btn btn-primary" href="#projects">View Projects ↓</a>
-        <a class="btn btn-ghost" href="https://github.com/vllknny" target="_blank">GitHub ↗</a>
-        <a class="btn btn-ghost" href="https://linkedin.com/in/vllknny" target="_blank">LinkedIn ↗</a>
-      </div>
-    </div>
-    <div class="waveform" id="waveform"></div>
-  </div>
-
-  <!-- PROJECTS -->
-  <section id="projects" class="fade-in">
-    <div class="section-label">Work</div>
-    <h2 class="section-title">Projects</h2>
-
-    <div class="projects-grid" id="projects-grid">
-      <a class="project-card" href="https://github.com/vllknny/anchortrade" target="_blank">
-        <div class="project-header">
-          <div class="project-icon">⚡</div>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-name">Anchor</div>
-        <p class="project-desc">Online papertrading learning platform for helping teach financial literacy to teenagers or students wanting to get into risk-adverse trading. Simulates previous market history in a digestible manner. </p>
-        <div class="project-tags">
-          <span class="tag tag-accent">Pinned</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">PostgreSQL</span>
-          <span class="tag">Python</span>
-          <span class="tag">G.Auth</span>
-        </div>
-      </a>
-
-      <a class="project-card" href="https://github.com/vllknny/topology-research" target="_blank">
-        <div class="project-header">
-          <div class="project-icon">⚡</div>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-name">Topology Research</div>
-        <p class="project-desc"> Research with Penn State University on topological data analysis and its applications to find connections in nodes within the most complex mathematical datasets.</p>
-        <div class="project-tags">
-          <span class="tag tag-accent">Pinned</span>
-          <span class="tag">Python</span>
-          <span class="tag">MatPlotLib</span>
-          <span class="tag">TDA</span>
-          <span class="tag">Docker</span>
-          <span class="tag">MCP</span>
-        </div>
-      </a>
-
-      <a class="project-card" href="https://github.com/vllknny/AQgen" target="_blank">
-        <div class="project-header">
-          <div class="project-icon">⚡</div>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-name">AQgen</div>
-        <p class="project-desc">Auto-query generation tool. Leverages AI to intelligently create querys from input content using NLP — useful for overhead, cloud platforms, and content review.</p>
-        <div class="project-tags">
-          <span class="tag tag-accent">Pinned</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">SQL</span>
-          <span class="tag">Data Analysis</span>
-          <span class="tag">AI/NLP</span>
-        </div>
-      </a>
-
-      <a class="project-card" href="https://github.com/vllknny/ssampler" target="_blank">
-        <div class="project-header">
-          <div class="project-icon">🎚</div>
-          <span class="project-arrow">↗</span>
-        </div>
-        <div class="project-name">ssampler</div>
-        <p class="project-desc">Stem-splitting sampler powered by <strong style="color:var(--text)">Demucs</strong> and built with JUCE &amp; C++. Separates audio into stems in real-time for live sampling and creative resampling workflows.</p>
-        <div class="project-tags">
-          <span class="tag tag-accent">Pinned</span>
-          <span class="tag">C++</span>
-          <span class="tag">JUCE</span>
-          <span class="tag">Demucs</span>
-          <span class="tag">Audio DSP</span>
-        </div>
-      </a>
-
-      <!-- ADD PROJECT — owner mode only (CSS-controlled) -->
-      <div class="project-card-add" id="add-project-card" onclick="openAddModal()">
-        <div class="add-icon">+</div>
-        <div class="add-label">Add a project</div>
-        <div style="font-size:12px;color:var(--muted);max-width:180px;line-height:1.5;">Pin another repo or custom project</div>
-      </div>
-    </div>
+    <div class="vhead" id="vhead"></div>
+    <div class="scroll" id="scroll"><div class="note" id="note"></div></div>
   </section>
+  <aside class="right" id="right" aria-label="Side panel"></aside>
+</div>
+<div class="status" id="status"></div>
 
-  <!-- SKILLS -->
-  <section id="skills" class="fade-in">
-    <div class="section-label">Stack</div>
-    <h2 class="section-title">Skills & Tools</h2>
-    <div class="skills-grid">
-      <div class="skill-cell">
-        <div class="skill-category">Languages</div>
-        <ul class="skill-list">
-          <li>Python</li><li>C / C++</li><li>JavaScript</li><li>R</li><li>SQL</li>
-        </ul>
-      </div>
-      <div class="skill-cell">
-        <div class="skill-category">Audio / DSP</div>
-        <ul class="skill-list">
-          <li>JUCE </li><li>Demucs (ML)</li><li>Mixing/Mastering</li><li>Signal Processing</li><li>VSTs / DAWs</li>
-        </ul>
-      </div>
-      <div class="skill-cell">
-        <div class="skill-category">Data / AI</div>
-        <ul class="skill-list">
-          <li>Azure</li><li>NLP</li><li>Tableau</li><li>PyTorch / NumPy</li>
-        </ul>
-      </div>
-      <div class="skill-cell">
-        <div class="skill-category">Tools</div>
-        <ul class="skill-list">
-          <li>Git / GitHub</li><li>Linux</li><li>VS Code</li><li>CMake</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+<script>
+(() => {
+'use strict';
 
-  <!-- ABOUT / RESUME -->
-  <section id="about" class="fade-in" style="padding:80px 48px;">
-    <!-- Left: bio -->
-    <div>
-      <div class="section-label">Background</div>
-      <h2 class="section-title">About Me</h2>
-      <div class="about-text">
-        <p>I'm Kunal — a <strong>Computer & Data Science major at Penn State</strong>, also a lifelong audio engineer who's been mixing, producing, and shaping sound since 2009.</p>
-        <p>My work lives at the crossroads of two worlds: the precision of software engineering and the artistry of music production. I build tools that serve both disciplines — from ML-driven query generators to real-time audio stem splitters.</p>
-        <p>Based in <strong>Harrisburg, PA</strong>. Open to collaborations, internships, and conversations about anything audio or code.</p>
-      </div>
-    </div>
+/* ───────────── helpers ───────────── */
+const ICONS = {
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+ folder:'<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+ chev:'<path d="m9 18 6-6-6-6"/>',
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ graph:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
+ tag:'<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r=".6" fill="currentColor"/>',
+ list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+ pleft:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
+ pright:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>',
+ plus:'<path d="M5 12h14M12 5v14"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ left:'<path d="m12 19-7-7 7-7M19 12H5"/>',
+ right:'<path d="M5 12h14m-7-7 7 7-7 7"/>',
+ home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+ image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
+ download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ pencil:'<path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>',
+ github:'<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+ info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+ alert:'<path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/>',
+ check:'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+ bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/>',
+ clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+ help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+ xc:'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/>',
+ quote:'<path d="M3 21c3 0 7-1 7-8V5c0-1.3-.9-2-2-2H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4M15 21c3 0 7-1 7-8V5c0-1.3-.9-2-2-2h-4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4"/>',
+ cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3L8 14.2 3 9.3l6.9-1z"/>',
+ code:'<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+ cap:'<path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'
+};
+const ic = (n, s = 16) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const mk = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const store = k => ({
+  get(n) { try { return window[k].getItem(n); } catch (e) { return null; } },
+  set(n, v) { try { window[k].setItem(n, v); return true; } catch (e) { return false; } },
+  del(n) { try { window[k].removeItem(n); } catch (e) {} }
+});
+const ls = store('localStorage'), ss = store('sessionStorage');
+const slug = s => s.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+const safeUrl = u => (typeof u === 'string' && /^(https?:\/\/|data:image\/(png|jpe?g|webp|gif);base64,|[\w./-]+$)/i.test(u.trim())) ? u.trim() : '';
+const fmtDate = d => { try { return new Date(d).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }); } catch (e) { return ''; } };
+let toastT;
+function toast(msg) { $('.toast')?.remove(); const t = mk('div', 'toast', esc(msg)); document.body.append(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 4200); }
 
-    <!-- Right: resume panel -->
-    <div class="resume-panel">
-
-      <!-- Upload controls — owner mode only -->
-      <div class="resume-upload-wrap" id="resume-upload-wrap">
-        <div class="resume-upload-zone" id="upload-zone" onclick="document.getElementById('resume-file-input').click()">
-          <input type="file" id="resume-file-input" accept=".pdf,.doc,.docx,.txt" />
-          <div class="upload-icon">📄</div>
-          <div class="upload-text">
-            <strong>Drop resume here</strong> or click to browse<br/>
-            PDF, DOCX, or TXT — parsed by AI
-          </div>
-          <div id="upload-filename"></div>
-        </div>
-        <button class="resume-parse-btn" id="parse-btn" onclick="parseResume()" disabled>Parse Resume →</button>
-        <div class="resume-status" id="resume-status"></div>
-      </div>
-
-      <!-- Resume display (all users see this once populated) -->
-      <div id="resume-content-area"></div>
-
-      <!-- Clear button — owner mode only -->
-      <button class="resume-clear-btn" id="resume-clear-btn" onclick="clearResume()">✕ Clear resume data</button>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="fade-in">
-    <div class="section-label">Reach out</div>
-    <div class="contact-heading">Let's build<br/><span>something.</span></div>
-    <p class="contact-sub">Open to collabs, internships, and cool audio/CS projects.</p>
-    <div class="contact-links">
-      <a class="btn btn-primary" href="https://linkedin.com/in/vllknny" target="_blank">LinkedIn ↗</a>
-      <a class="btn btn-ghost" href="https://github.com/vllknny" target="_blank">GitHub ↗</a>
-      <a class="btn btn-ghost" href="/cdn-cgi/l/email-protection#98f3edf6f9f4d8fde0f9f5e8f4fdb6fbf7f5">Email ↗</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <span>© 2026 Kunal Ghosh · <a href="https://github.com/vllknny" target="_blank">vllknny</a></span>
-    <span>Built for <a href="https://pages.github.com" target="_blank">GitHub Pages</a></span>
-  </footer>
-
-  <!-- OWNER LOGIN MODAL -->
-  <div class="modal-overlay" id="login-modal">
-    <div class="modal" style="max-width:380px;">
-      <div class="modal-title">Owner Access</div>
-      <div class="modal-subtitle">Enter your password to unlock editing controls. Only visible to you in this session.</div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" id="owner-password" placeholder="••••••••" />
-        <div id="login-error" style="font-size:11px;color:#f06060;margin-top:6px;min-height:16px;"></div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal('login-modal')">Cancel</button>
-        <button class="btn-submit" onclick="attemptLogin()">Unlock →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADD PROJECT MODAL -->
-  <div class="modal-overlay" id="add-project-modal">
-    <div class="modal">
-      <div class="modal-title">Add a Project</div>
-      <div class="modal-subtitle">Adds a new card to the projects grid for this session.</div>
-      <div class="form-group">
-        <label class="form-label">Project Name</label>
-        <input class="form-input" type="text" id="proj-name" placeholder="e.g. MyTool" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="proj-desc" placeholder="What does it do?"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">GitHub URL</label>
-        <input class="form-input" type="url" id="proj-url" placeholder="https://github.com/vllknny/..." />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Tags (comma-separated)</label>
-        <input class="form-input" type="text" id="proj-tags" placeholder="Python, ML, Audio" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Icon (emoji)</label>
-        <input class="form-input" type="text" id="proj-icon" placeholder="🎛" maxlength="4" />
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal('add-project-modal')">Cancel</button>
-        <button class="btn-submit" onclick="addProject()">Add Project →</button>
-      </div>
-    </div>
-  </div>
-
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ─────────────────────────────────────────────
-  // CONFIG — change this to your own password
-  // ─────────────────────────────────────────────
-  const OWNER_PASS = 'vllknny2024';
-  const RESUME_KEY = 'vllknny_resume_v1';
-
-  // ── WAVEFORM ──
-  const wf = document.getElementById('waveform');
-  [20,40,80,120,160,180,190,200,185,160,130,90,50,30,40,60,100,150,185,195,170,130,85,50,35,45,70,30]
-    .forEach((h, i) => {
-      const b = document.createElement('div');
-      b.className = 'waveform-bar';
-      b.style.height = h + 'px';
-      b.style.animationDelay = (i * 0.06) + 's';
-      wf.appendChild(b);
-    });
-
-  // ── SCROLL FADE ──
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
-
-  // ─────────────────────────────────────────────
-  // OWNER MODE
-  // ─────────────────────────────────────────────
-  let isOwner = sessionStorage.getItem('ownerMode') === '1';
-
-  function applyOwnerMode() {
-    document.body.classList.toggle('owner-mode', isOwner);
-    const btn = document.getElementById('owner-btn');
-    btn.classList.toggle('active', isOwner);
-    btn.textContent = isOwner ? '⚿ owner' : '⚿';
-    btn.title = isOwner ? 'Exit owner mode' : 'Owner login';
-  }
-
-  document.getElementById('owner-btn').addEventListener('click', () => {
-    if (isOwner) {
-      isOwner = false;
-      sessionStorage.removeItem('ownerMode');
-      applyOwnerMode();
-    } else {
-      openModal('login-modal');
-      setTimeout(() => document.getElementById('owner-password').focus(), 280);
-    }
-  });
-
-  function attemptLogin() {
-    const pw = document.getElementById('owner-password').value;
-    if (pw === OWNER_PASS) {
-      isOwner = true;
-      sessionStorage.setItem('ownerMode', '1');
-      applyOwnerMode();
-      closeModal('login-modal');
-      document.getElementById('owner-password').value = '';
-      document.getElementById('login-error').textContent = '';
-    } else {
-      document.getElementById('login-error').textContent = 'Incorrect password.';
-      document.getElementById('owner-password').value = '';
-      document.getElementById('owner-password').focus();
-    }
-  }
-
-  document.getElementById('owner-password').addEventListener('keydown', e => {
-    if (e.key === 'Enter') attemptLogin();
-  });
-
-  applyOwnerMode();
-
-  // ─────────────────────────────────────────────
-  // MODALS
-  // ─────────────────────────────────────────────
-  function openModal(id) { document.getElementById(id).classList.add('active'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape')
-      document.querySelectorAll('.modal-overlay.active').forEach(el => closeModal(el.id));
-  });
-
-  function openAddModal() { if (isOwner) openModal('add-project-modal'); }
-
-  // ─────────────────────────────────────────────
-  // ADD PROJECT
-  // ─────────────────────────────────────────────
-  function addProject() {
-    const name = document.getElementById('proj-name').value.trim();
-    const desc = document.getElementById('proj-desc').value.trim();
-    const url  = document.getElementById('proj-url').value.trim();
-    const tags = document.getElementById('proj-tags').value.trim();
-    const icon = document.getElementById('proj-icon').value.trim() || '📁';
-    if (!name) return;
-
-    const tagHtml = tags.split(',').map(t => t.trim()).filter(Boolean)
-      .map(t => `<span class="tag">${t}</span>`).join('');
-
-    const card = document.createElement('a');
-    card.className = 'project-card';
-    card.href = url || '#';
-    if (url) card.target = '_blank';
-    card.innerHTML = `
-      <div class="project-header">
-        <div class="project-icon">${icon}</div>
-        <span class="project-arrow">↗</span>
-      </div>
-      <div class="project-name">${name}</div>
-      <p class="project-desc">${desc || 'No description provided.'}</p>
-      <div class="project-tags">${tagHtml}</div>
-    `;
-
-    const grid = document.getElementById('projects-grid');
-    grid.insertBefore(card, document.getElementById('add-project-card'));
-
-    ['proj-name','proj-desc','proj-url','proj-tags','proj-icon'].forEach(id => {
-      document.getElementById(id).value = '';
-    });
-    closeModal('add-project-modal');
-  }
-
-  // ─────────────────────────────────────────────
-  // RESUME — file handling
-  // ─────────────────────────────────────────────
-  let resumeFile = null; // { base64, mediaType, name }
-
-  const uploadZone = document.getElementById('upload-zone');
-  const fileInput  = document.getElementById('resume-file-input');
-  const parseBtn   = document.getElementById('parse-btn');
-  const statusEl   = document.getElementById('resume-status');
-
-  uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('dragging'); });
-  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragging'));
-  uploadZone.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadZone.classList.remove('dragging');
-    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-  });
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) handleFile(fileInput.files[0]);
-  });
-
-  function handleFile(file) {
-    const ext = file.name.split('.').pop().toLowerCase();
-    if (!['pdf','doc','docx','txt'].includes(ext)) {
-      setStatus('Unsupported file. Use PDF, DOCX, or TXT.', 'error');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = reader.result.split(',')[1];
-      let mediaType = 'application/octet-stream';
-      if (ext === 'pdf')  mediaType = 'application/pdf';
-      if (ext === 'txt')  mediaType = 'text/plain';
-      if (ext === 'docx') mediaType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      resumeFile = { base64, mediaType, name: file.name, ext };
-      document.getElementById('upload-filename').textContent = '✓ ' + file.name;
-      parseBtn.disabled = false;
-      setStatus('');
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function setStatus(msg, type) {
-    statusEl.textContent = msg;
-    statusEl.className = 'resume-status' + (type ? ' ' + type : '');
-  }
-
-  // ─────────────────────────────────────────────
-  // RESUME — parse via Anthropic API
-  // ─────────────────────────────────────────────
-  async function parseResume() {
-    if (!resumeFile) return;
-    parseBtn.disabled = true;
-    setStatus('Parsing resume with AI…', 'loading');
-
-    const systemPrompt = `You are a resume parser. Extract structured data from the resume and return ONLY valid JSON — no markdown, no explanation. Use this exact schema:
-{
-  "experience": [
-    { "org": "Company or org name", "role": "Job title", "period": "Date range e.g. 2022 – 2024", "desc": "1–2 sentence summary of role." }
+/* ───────────── config ───────────── */
+const DRAFT_KEY = 'vllknny:draft:v1';
+const DEFAULT_CFG = {
+  user: 'vllknny',
+  repos: [{ repo: 'vllknny/AQgen' }, { repo: 'vllknny/ssampler' }],
+  gallery: [
+    { title: 'ssampler',  sub: 'C++ · JUCE · Demucs',               route: 'Projects/ssampler' },
+    { title: 'AQgen',     sub: 'Natural language → SQL',            route: 'Projects/AQgen' },
+    { title: 'JUCE Audio Intelligence Platform', sub: 'C++ · Rust · Hugging Face', route: 'Projects/JUCE Audio Intelligence Platform' },
+    { title: 'Topology Research Analysis',       sub: 'Python · Docker · SciPy',   route: 'Projects/Topology Research Analysis' },
+    { title: 'Monte Carlo Financial Return Simulator', sub: 'Python · PyTorch · yFinance', route: 'Projects/Monte Carlo Financial Return Simulator' }
   ],
-  "education": [
-    { "org": "School name", "role": "Degree and field", "period": "Date range", "desc": "Optional note." }
-  ],
-  "skills": ["skill1", "skill2"]
-}
-Keep experience and education in reverse chronological order. Skills: up to 20 individual items. Return only JSON, nothing else.`;
-
-    let userContent;
-
-    if (resumeFile.ext === 'pdf') {
-      userContent = [
-        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: resumeFile.base64 } },
-        { type: 'text', text: 'Parse this resume and return JSON as instructed.' }
-      ];
-    } else {
-      // For non-PDF: decode base64 to text and send as plain text
-      let textContent = '';
-      try {
-        textContent = atob(resumeFile.base64);
-      } catch(e) {
-        textContent = resumeFile.name;
-      }
-      userContent = `Parse this resume and return JSON as instructed.\n\nResume content:\n${textContent}`;
-    }
-
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: userContent }]
-        })
-      });
-
-      const data = await res.json();
-      if (data.error) throw new Error(data.error.message || 'API error');
-
-      const raw = (data.content || []).map(b => b.text || '').join('').trim();
-      const clean = raw.replace(/^```(?:json)?|```$/gm, '').trim();
-      const parsed = JSON.parse(clean);
-
-      localStorage.setItem(RESUME_KEY, JSON.stringify(parsed));
-      renderResume(parsed);
-      setStatus('✓ Resume parsed and saved.', 'success');
-
-    } catch(err) {
-      console.error(err);
-      setStatus('Error: ' + err.message, 'error');
-      parseBtn.disabled = false;
-    }
-  }
-
-
-  // ─────────────────────────────────────────────
-  // RESUME — render
-  // ─────────────────────────────────────────────
-  function renderResume(data) {
-    const area = document.getElementById('resume-content-area');
-    if (!data || (!data.experience?.length && !data.education?.length && !data.skills?.length)) {
-      area.innerHTML = emptyHtml();
-      return;
-    }
-
-    let html = '<div class="resume-content">';
-
-    if (data.experience && data.experience.length) {
-      html += `<div class="resume-block">
-        <div class="resume-block-title">Experience</div>
-        <div class="resume-entries">`;
-      data.experience.forEach(e => {
-        html += `<div>
-          <div class="resume-entry-org">${esc(e.org)}</div>
-          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' &middot; ' + esc(e.period) : ''}</div>
-          ${e.desc ? `<div class="resume-entry-desc">${esc(e.desc)}</div>` : ''}
-        </div>`;
-      });
-      html += `</div></div>`;
-    }
-
-    if (data.education && data.education.length) {
-      html += `<div class="resume-block">
-        <div class="resume-block-title">Education</div>
-        <div class="resume-entries">`;
-      data.education.forEach(e => {
-        html += `<div>
-          <div class="resume-entry-org">${esc(e.org)}</div>
-          <div class="resume-entry-meta">${esc(e.role)}${e.period ? ' &middot; ' + esc(e.period) : ''}</div>
-          ${e.desc ? `<div class="resume-entry-desc">${esc(e.desc)}</div>` : ''}
-        </div>`;
-      });
-      html += `</div></div>`;
-    }
-
-    if (data.projects && data.projects.length) {
-      html += `<div class="resume-block">
-        <div class="resume-block-title">Featured Projects</div>
-        <div class="resume-entries">`;
-      data.projects.forEach(p => {
-        html += `<div>
-          <div class="resume-entry-org">${esc(p.name)}</div>
-          <div class="resume-entry-meta" style="color:var(--accent);opacity:0.75;">${esc(p.tags)}</div>
-          ${p.desc ? `<div class="resume-entry-desc">${esc(p.desc)}</div>` : ''}
-        </div>`;
-      });
-      html += `</div></div>`;
-    }
-
-    if (data.skills && data.skills.length) {
-      html += `<div class="resume-block">
-        <div class="resume-block-title">Skills &amp; Certifications</div>
-        <div class="resume-skill-tags">
-          ${data.skills.map(s => `<span class="resume-skill-tag">${esc(s)}</span>`).join('')}
-        </div>
-      </div>`;
-    }
-
-    html += '</div>';
-    area.innerHTML = html;
-  }
-
-  function esc(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
-  }
-
-  function clearResume() {
-    localStorage.removeItem(RESUME_KEY);
-    renderResume(BAKED_RESUME);
-    resumeFile = null;
-    document.getElementById('upload-filename').textContent = '';
-    fileInput.value = '';
-    parseBtn.disabled = true;
-    setStatus('Resume reset to default.');
-  }
-
-  function emptyHtml() {
-    return `<div class="resume-empty">
-      <div style="font-size:24px;margin-bottom:12px;opacity:0.35;">&#128196;</div>
-      No resume data available.<br/>
-      <span style="font-size:12px;color:var(--muted);">Owner: log in and upload to populate this section.</span>
-    </div>`;
-  }
-
-  // ─────────────────────────────────────────────
-  // BAKED-IN RESUME — from resume
-  // Owner can override by uploading a new file
-  // ─────────────────────────────────────────────
-  const BAKED_RESUME = {
-    "experience": [
-      {
-        "org": "Meta",
-        "role": "Demucs v4 / AI Engineer",
-        "period": "June 2020 – September 2023",
-        "desc": "Contracted by Meta Research to integrate ML-powered components into DSP pipelines supporting transformer-based audio stem separation (MUSDB dataset, 150+ multitrack songs). Implemented CUDA-accelerated hybrid transformer architecture and spectrogram analysis routines processing 1000s of audio frames per track."
-      },
-      {
-        "org": "Self Employed",
-        "role": "Audio Engineer",
-        "period": "October 2009 – May 2024",
-        "desc": "Engineered 2,000+ movies, songs, and audio projects. Delivered high-reliability audio systems under real-world latency and quality constraints, optimizing workflows through automation and signals-based tooling."
-      }
-    ],
-    "education": [
-      {
-        "org": "Pennsylvania State University",
-        "role": "B.E. Computational Data Science — GPA 3.32 / 4.00",
-        "period": "Expected May 2028",
-        "desc": "Minors in Economics & Artificial Intelligence. Orgs: IEEE, Engineering Leadership Society, HackPSU, PSMusicGroup."
-      }
-    ],
-    "projects": [
-      {
-        "name": "JUCE Audio Intelligence Platform",
-        "tags": "C++, Rust, Hugging Face, DeMucs v4",
-        "desc": "Modular OOP audio signal processing app with ML-integrated DSP pipelines. Implements transformer-based stem separation via DeMucs v4 with spectrogram normalization and feature extraction."
-      },
-      {
-        "name": "Topology Research Analysis",
-        "tags": "Python, Docker, SciPy, Data Visualization",
-        "desc": "Open-source research support framework for topology experiments — containerized reproducible environments, modular scientific computing utilities, and automated dataset tooling."
-      },
-      {
-        "name": "Monte Carlo Financial Return Simulator",
-        "tags": "Python, PyTorch, yFinance",
-        "desc": "Stochastic simulation engine for historical and forecasted market returns using Brownian motion, Ito-inspired probabilistic modeling, and CQF Institute international data."
-      }
-    ],
-    "skills": [
-      "Python","C++","Rust","JavaScript","R","MySQL","MongoDB",
-      "PyTorch","Keras","Pandas","NumPy",
-      "Microsoft Azure","Docker","Kubernetes",
-      "LLM Inference","Semantic Embeddings",
-      "AZ-900 (Azure Fundamentals)","DP-900 (Azure Data Fundamentals)","Six Sigma Green Belt"
-    ]
+  notes: []
+};
+function normalize(j) {
+  j = j && typeof j === 'object' ? j : {};
+  return {
+    user: /^[\w-]+$/.test(j.user || '') ? j.user : 'vllknny',
+    repos: (Array.isArray(j.repos) ? j.repos : []).filter(r => r && /^[\w.-]+\/[\w.-]+$/.test(r.repo || '')).map(r => ({ repo: r.repo })),
+    gallery: (Array.isArray(j.gallery) ? j.gallery : []).filter(g => g && g.title).map(g => ({ title: String(g.title), sub: String(g.sub || ''), route: g.route ? String(g.route) : '', url: g.url ? String(g.url) : '', image: g.image ? String(g.image) : '' })),
+    notes: (Array.isArray(j.notes) ? j.notes : []).filter(n => n && n.title).map(n => ({ id: String(n.id || ('n' + Math.random().toString(36).slice(2, 8))), title: String(n.title), folder: n.folder === 'Projects' ? 'Projects' : '', tags: (Array.isArray(n.tags) ? n.tags : []).map(String), body: String(n.body || '') }))
   };
+}
 
-  // Load on page start — localStorage overrides baked data if owner uploads newer resume
-  (function init() {
+/* ───────────── state ───────────── */
+const S = {
+  cfg: normalize(DEFAULT_CFG), committed: normalize(DEFAULT_CFG),
+  editing: ss.get('editing') === '1' || /[?&]edit\b/.test(location.search),
+  tabs: [], active: 'Home',
+  meta: {}, readmes: {},
+  rpanel: 'tags', open: { Projects: true },
+  token: 0, raf: 0, outline: [], counts: { w: 0, c: 0 }
+};
+
+/* ───────────── static notes (from the résumé) ───────────── */
+const STATIC = [
+ { id:'Home', title:'Home', folder:'', order:0, icon:'home', tags:['home'],
+   props:[['type','profile'],['location','Harrisburg, PA'],['school','Penn State'],['github',{ href:'https://github.com/vllknny', text:'github.com/vllknny' }]],
+   md:`> [!abstract] Computational Data Science · Penn State
+> Audio engineer since 2009. Contracted by Meta Research on Demucs v4. I like the place where signal processing meets machine learning.
+
+*working hard or hardly working.*
+
+## Map of content
+
+- [[Experience]] — Meta Research (Demucs v4) and a long run as an audio engineer
+- [[Education]] — B.E. Computational Data Science, Penn State
+- [[Skills]] — languages, ML tooling, cloud, certifications
+- [[Portfolio]] — project gallery
+- [[Contact]] — email, LinkedIn, GitHub, résumé
+
+## Projects
+
+{{projects}}
+
+> [!info] About this vault
+> Pages under Projects are the live READMEs of the matching GitHub repositories. Open the graph from the ribbon, or press Ctrl/Cmd + O to jump to any note.` },
+
+ { id:'Experience', title:'Experience', folder:'', order:1, tags:['experience','audio','dsp','ml'],
+   props:[['type','work history']],
+   md:`## Meta — Demucs v4 / AI Engineer
+
+*June 2020 – September 2023 · United States · contract via Meta Research*
+
+- Contracted by Meta Research to integrate ML-powered components into DSP pipelines supporting transformer-based audio stem separation models trained on the MUSDB dataset (~150+ multitrack songs).
+- Implemented a CUDA-accelerated hybrid transformer architecture to optimize stems and reduce processing latency.
+- Developed spectrogram analysis & normalization routines enabling automated feature extraction across 1000s of audio frames per track.
+
+> [!tip] Related
+> The personal projects built on Demucs: [[ssampler]] and [[JUCE Audio Intelligence Platform]].
+
+## Self Employed — Audio Engineer
+
+*October 2009 – May 2024 · Harrisburg, PA*
+
+- Delivered high-reliability audio systems under real-world constraints (latency, quality, repeatability).
+- Developed a deep intuition for signal behavior, debugging complex systems, and iterative refinement.
+- Engineered 2,000+ movies, songs, and audio projects, optimizing workflows through automation and signals tooling.` },
+
+ { id:'Education', title:'Education', folder:'', order:2, tags:['education','cs','ai','math'],
+   props:[['type','education'],['gpa','3.32 / 4.00'],['graduating','May 2028']],
+   md:`## The Pennsylvania State University
+
+**College of Engineering** · University Park, PA
+
+- B.E. Computational Data Science — GPA 3.32 / 4.00, graduating May 2028
+- Minors in Economics and Artificial Intelligence
+
+### Related coursework
+
+Discrete Math · Object-Oriented Programming · Data Organization · Introduction to R
+
+### Organizations
+
+IEEE · Engineering Leadership Society · HackPSU · CareerPREP · PSMusicGroup` },
+
+ { id:'Skills', title:'Skills', folder:'', order:3, tags:['skills','cs','ml','cloud','dsp'],
+   props:[['type','skills']],
+   md:`| Area | Stack |
+|---|---|
+| Languages & tools | Python, C++, R, MySQL, Rust, JavaScript, Microsoft Azure, MongoDB, Docker, Kubernetes |
+| ML / GenAI | PyTorch, Keras, Pandas, NumPy, LLM inference workflows, semantic embeddings |
+| Audio / DSP | JUCE, Demucs v4, spectrogram analysis, CUDA-accelerated pipelines |
+
+## Certifications
+
+- AZ-900 — Azure Fundamentals
+- DP-900 — Azure Data Fundamentals
+- Six Sigma Green Belt` },
+
+ { id:'Portfolio', title:'Portfolio', folder:'', order:4, kind:'gallery', icon:'image', tags:['portfolio'],
+   props:[['type','gallery']],
+   md:`Selected work. Hover to focus a project; click to read it.` },
+
+ { id:'Contact', title:'Contact', folder:'', order:5, tags:['contact'],
+   props:[['type','contact']],
+   md:`- **Email** — [kunalghosh2005@gmail.com](mailto:kunalghosh2005@gmail.com)
+- **Phone** — [+1 (717) 719-7810](tel:+17177197810)
+- **LinkedIn** — [linkedin.com/in/vllknny](https://linkedin.com/in/vllknny)
+- **GitHub** — [github.com/vllknny](https://github.com/vllknny)
+- **Location** — Harrisburg, PA
+- **Résumé** — [Download PDF](resume.pdf)` },
+
+ { id:'Projects/JUCE Audio Intelligence Platform', title:'JUCE Audio Intelligence Platform', folder:'Projects', sub:'C++ · Rust · Hugging Face · Demucs v4',
+   tags:['project','audio','dsp','ml','cpp','rust'], props:[['type','project'],['stack','C++, Rust, Hugging Face, DeMucs v4']],
+   md:`- Built modular object-oriented applications for audio signal processing and analysis.
+- Integrated machine learning components into DSP pipelines while maintaining performance constraints.
+- Implemented transformer-based audio stem separation using DeMucs v4 architectures.
+- Applied spectrogram analysis and normalization algorithms for improved feature extraction.
+
+> [!tip] Related
+> The plugin side of this work lives in [[ssampler]]. Professional background: [[Experience]].` },
+
+ { id:'Projects/Topology Research Analysis', title:'Topology Research Analysis', folder:'Projects', sub:'Python · Docker · SciPy · data visualization',
+   tags:['project','python','research','docker'], props:[['type','project'],['stack','Python, Docker, SciPy, Data Visualization']],
+   md:`- Led development of an open-source research support framework designed to streamline topology-focused experiments and lab workflows.
+- Engineered modular services and utilities for scientific computing, containerized reproducible research environments, and automated tooling for dataset processing and visualization.
+- Developed flexible API endpoints and automation scripts to support interactive data exploration and models.` },
+
+ { id:'Projects/Monte Carlo Financial Return Simulator', title:'Monte Carlo Financial Return Simulator', folder:'Projects', sub:'Python · PyTorch · yFinance',
+   tags:['project','python','ml','finance','probability'], props:[['type','project'],['stack','Python, PyTorch, yFinance']],
+   md:`- Built a stochastic simulation engine using REST APIs to analyze historical and forecasted market returns.
+- Implemented probabilistic modeling techniques (Brownian motion concepts, Ito-inspired reasoning) to support predictive analytics, as well as importing crucial international business data recorded by the CQF Institute.` }
+];
+
+/* ───────────── note model ───────────── */
+function allNotes() {
+  const out = [], seen = new Set();
+  const add = n => { if (!seen.has(n.id)) { seen.add(n.id); out.push(n); } };
+  STATIC.forEach(add);
+  S.cfg.repos.forEach(r => {
+    const name = r.repo.split('/')[1], m = S.meta[r.repo];
+    add({ id:'Projects/' + name, title:name, folder:'Projects', kind:'repo', repo:r.repo, sub:m?.description || '',
+          tags:['project', ...(m ? [m.language, ...(m.topics || [])] : []).filter(Boolean).map(t => String(t).toLowerCase().replace(/\s+/g, '-'))] });
+  });
+  S.cfg.notes.forEach(n => add({ id:(n.folder ? n.folder + '/' : '') + n.title, title:n.title, folder:n.folder, kind:'custom', cid:n.id, md:n.body, tags:n.tags.map(t => t.toLowerCase()), order:50 }));
+  return out;
+}
+function noteById(id) {
+  if (id === 'graph') return { id, title:'Graph view', kind:'graph', folder:'', icon:'graph', tags:[] };
+  if (id.startsWith('tag/')) return { id, title:'#' + id.slice(4), kind:'tag', folder:'', icon:'tag', tags:[] };
+  return allNotes().find(n => n.id === id) || null;
+}
+const findNote = t => { t = t.toLowerCase(); return allNotes().find(n => n.title.toLowerCase() === t || n.id.toLowerCase() === t); };
+function tagCounts() {
+  const c = {}; allNotes().forEach(n => (n.tags || []).forEach(t => c[t] = (c[t] || 0) + 1));
+  return Object.entries(c).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+}
+function backlinks(id) {
+  const me = noteById(id); if (!me) return 0; let n = 0;
+  allNotes().forEach(o => {
+    if (o.id === id) return;
+    if (o.md && [...o.md.matchAll(/\[\[([^\]|\n]+)/g)].some(m => { const t = findNote(m[1].trim()); return t && t.id === id; })) n++;
+    else if (o.id === 'Home' && me.folder === 'Projects') n++;
+  });
+  return n;
+}
+function projectsList() {
+  return allNotes().filter(n => n.folder === 'Projects').sort((a, b) => a.title.localeCompare(b.title))
+    .map(n => `- [[${n.title}]]${n.sub ? ' — ' + n.sub.replace(/[\[\]]/g, '') : ''}`).join('\n') || '*No projects yet.*';
+}
+
+/* ───────────── GitHub (repos → subpages) ───────────── */
+const HOUR = 3600e3;
+async function loadMeta(repo) {
+  if (S.meta[repo]) return S.meta[repo];
+  const c = ls.get('meta:' + repo);
+  if (c) { try { const j = JSON.parse(c); if (Date.now() - j.t < HOUR) return S.meta[repo] = j.d; } catch (e) {} }
+  try {
+    const r = await fetch(`https://api.github.com/repos/${repo}`, { headers:{ Accept:'application/vnd.github+json' } });
+    if (!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    const d = { description:j.description || '', language:j.language || '', stars:j.stargazers_count || 0, topics:j.topics || [], pushed:j.pushed_at, url:j.html_url, homepage:j.homepage || '', license:j.license?.spdx_id || '' };
+    ls.set('meta:' + repo, JSON.stringify({ t:Date.now(), d }));
+    return S.meta[repo] = d;
+  } catch (e) { return null; }
+}
+async function loadReadme(repo) {
+  if (S.readmes[repo]) return S.readmes[repo];
+  const c = ss.get('readme:' + repo); if (c) return S.readmes[repo] = c;
+  let txt = null;
+  for (const f of ['README.md', 'readme.md', 'Readme.md']) {
+    try { const r = await fetch(`https://raw.githubusercontent.com/${repo}/HEAD/${f}`); if (r.ok) { txt = await r.text(); break; } } catch (e) {}
+  }
+  if (txt == null) {
+    try { const r = await fetch(`https://api.github.com/repos/${repo}/readme`, { headers:{ Accept:'application/vnd.github.raw+json' } }); if (r.ok) txt = await r.text(); } catch (e) {}
+  }
+  if (txt == null) throw new Error('README not found');
+  S.readmes[repo] = txt; ss.set('readme:' + repo, txt);
+  return txt;
+}
+
+/* ───────────── markdown pipeline ───────────── */
+const CALLOUTS = {
+  note:['pencil','68,138,255'], abstract:['clip','83,223,221'], summary:['clip','83,223,221'], tldr:['clip','83,223,221'],
+  info:['info','68,138,255'], todo:['info','68,138,255'], tip:['bulb','83,223,221'], hint:['bulb','83,223,221'],
+  important:['bulb','168,130,255'], success:['check','68,207,110'], check:['check','68,207,110'], done:['check','68,207,110'],
+  question:['help','233,151,63'], warning:['alert','233,151,63'], caution:['alert','251,70,76'],
+  failure:['xc','251,70,76'], danger:['xc','251,70,76'], error:['xc','251,70,76'], bug:['xc','251,70,76'],
+  example:['list','168,130,255'], quote:['quote','158,158,158'], cite:['quote','158,158,158']
+};
+const repoUrl = (href, repo, raw) => {
+  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('//')) return href;
+  const p = href.replace(/^\.?\//, '');
+  return raw ? `https://raw.githubusercontent.com/${repo}/HEAD/${p}` : `https://github.com/${repo}/blob/HEAD/${p}`;
+};
+function mdToEl(md, opts = {}) {
+  const host = mk('div', 'md');
+  if (!window.marked || !window.DOMPurify) { host.append(mk('pre', '', esc(md))); return host; }
+  let src = md;
+  if (!opts.repo) {
+    src = src.replace(/\{\{projects\}\}/g, projectsList())
+      .replace(/\[\[([^\]\n|]+?)(?:\|([^\]\n]+?))?\]\]/g, (m, t, a) => {
+        const n = findNote(t.trim()), label = esc(a || t);
+        return n ? `<a class="wikilink" href="#/${encodeURI(n.id)}">${label}</a>` : `<span class="wikilink unresolved" title="Note not found">${label}</span>`;
+      });
+  }
+  host.innerHTML = DOMPurify.sanitize(marked.parse(src, { gfm:true }), { FORBID_TAGS:['style','form','iframe','object','embed','link','meta','base'], FORBID_ATTR:['style'] });
+  const used = {};
+  $$('h1,h2,h3,h4,h5,h6', host).forEach(h => { let s = slug(h.textContent) || 'section'; if (used[s]) s += '-' + used[s]++; else used[s] = 1; h.id = s; });
+  $$('a[href]', host).forEach(a => {
+    let h = a.getAttribute('href') || '';
+    if (opts.repo && !h.startsWith('#')) { h = repoUrl(h, opts.repo, false); a.setAttribute('href', h); }
+    if (/^https?:\/\//i.test(h)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; if (!a.querySelector('img')) a.classList.add('ext'); }
+  });
+  $$('img', host).forEach(i => {
+    let s = i.getAttribute('src') || '';
+    if (opts.repo) s = repoUrl(s, opts.repo, true);
+    i.setAttribute('src', s); i.loading = 'lazy'; i.referrerPolicy = 'no-referrer';
+  });
+  $$('source', host).forEach(s => s.remove());
+  $$('blockquote', host).forEach(bq => {
+    const p = bq.firstElementChild; if (!p || p.tagName !== 'P') return;
+    const m = p.innerHTML.match(/^\s*\[!(\w+)\][+-]?[ \t]*([^\n<]*)/); if (!m) return;
+    const type = m[1].toLowerCase(), def = CALLOUTS[type] || CALLOUTS.note;
+    const rest = p.innerHTML.slice(m[0].length).replace(/^\s*(<br\s*\/?>)?\s*/i, '');
+    const box = mk('div', 'callout'); box.style.setProperty('--c', def[1]);
+    box.append(mk('div', 'callout-title', `${ic(def[0], 17)}<span>${m[2].trim() ? esc(m[2].trim()) : type[0].toUpperCase() + type.slice(1)}</span>`));
+    const body = mk('div', 'callout-content');
+    if (rest.trim()) body.append(mk('p', '', rest));
+    [...bq.children].slice(1).forEach(c => body.append(c));
+    if (body.childNodes.length) box.append(body);
+    bq.replaceWith(box);
+  });
+  $$('table', host).forEach(t => { const w = mk('div', 'tbl'); t.replaceWith(w); w.append(t); });
+  if (window.hljs) { try { hljs.configure({ ignoreUnescapedHTML:true }); } catch (e) {} }
+  $$('pre', host).forEach(pre => {
+    const code = pre.querySelector('code');
+    if (code && window.hljs) { try { hljs.highlightElement(code); } catch (e) {} }
+    const b = mk('button', 'copy', 'copy'); b.type = 'button'; b.setAttribute('aria-label', 'Copy code');
+    b.onclick = () => navigator.clipboard?.writeText((code || pre).textContent).then(() => { b.textContent = 'copied'; setTimeout(() => b.textContent = 'copy', 1400); });
+    pre.append(b);
+  });
+  $$('input[type=checkbox]', host).forEach(i => i.disabled = true);
+  return host;
+}
+
+/* ───────────── routing & tabs ───────────── */
+const idFromHash = () => { try { return decodeURI(location.hash.replace(/^#\/?/, '')) || 'Home'; } catch (e) { return 'Home'; } };
+function nav(id) {
+  const h = '#/' + encodeURI(id);
+  if (location.hash === h) openNote(id); else location.hash = h;
+}
+function openNote(id) {
+  if (!S.tabs.includes(id)) S.tabs.push(id);
+  S.active = id; renderAll();
+}
+function closeTab(id) {
+  const i = S.tabs.indexOf(id); if (i < 0) return;
+  S.tabs.splice(i, 1);
+  if (S.active === id) nav(S.tabs[i] || S.tabs[i - 1] || 'Home'); else renderTabs();
+}
+window.addEventListener('hashchange', () => openNote(idFromHash()));
+
+/* ───────────── chrome ───────────── */
+function renderRibbon() {
+  const r = $('#ribbon'); r.innerHTML = '';
+  const b = (icon, title, fn, on) => { const x = mk('button', 'rbtn' + (on ? ' on' : ''), ic(icon, 18)); x.title = title; x.setAttribute('aria-label', title); x.onclick = fn; r.append(x); return x; };
+  b('pleft', 'Toggle file explorer', () => { document.body.classList.toggle('no-side'); renderRibbon(); }, !document.body.classList.contains('no-side'));
+  b('search', 'Quick switcher (Ctrl/Cmd+O)', openSwitcher);
+  b('graph', 'Graph view', () => nav('graph'), S.active === 'graph');
+  b('tag', 'Tags', () => { S.rpanel = 'tags'; document.body.classList.remove('no-right'); renderRight(); });
+  b('home', 'Home', () => nav('Home'), S.active === 'Home');
+  r.append(mk('div', 'sp'));
+  const g = mk('a', 'rbtn', ic('github', 18)); g.href = 'https://github.com/' + S.cfg.user; g.target = '_blank'; g.rel = 'noopener'; g.title = 'GitHub'; g.setAttribute('aria-label', 'GitHub profile'); r.append(g);
+}
+function renderTree() {
+  $('#vault').innerHTML = `${ic('folder', 16)}<span>${esc(S.cfg.user)}</span><small>vault</small>`;
+  const eb = $('#editbar'); eb.innerHTML = '';
+  [['github', 'Repos', openRepoPicker], ['plus', 'Note', () => openNoteEditor()], ['download', 'Export', exportCfg], ['trash', 'Discard', discardDraft]]
+    .forEach(([i, t, fn]) => { const c = mk('button', 'chip', ic(i, 13) + t); c.onclick = fn; eb.append(c); });
+  const tree = $('#tree'); tree.innerHTML = '';
+  const notes = allNotes();
+  const file = n => {
+    const a = mk('a', 'row' + (S.active === n.id ? ' active' : ''), `${ic(n.icon || 'file', 15)}<span class="l">${esc(n.title)}</span>`);
+    a.href = '#/' + encodeURI(n.id); if (S.active === n.id) a.setAttribute('aria-current', 'page'); return a;
+  };
+  notes.filter(n => !n.folder).sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.title.localeCompare(b.title)).forEach(n => tree.append(file(n)));
+  const kids = notes.filter(n => n.folder === 'Projects').sort((a, b) => a.title.localeCompare(b.title));
+  const f = mk('div', 'row folder' + (S.open.Projects ? ' open' : ''), `<span class="chev">${ic('chev', 14)}</span>${ic('folder', 15)}<span class="l">Projects</span><small style="color:var(--faint)">${kids.length}</small>`);
+  f.onclick = () => { S.open.Projects = !S.open.Projects; renderTree(); };
+  const wrap = mk('div', 'kids'); wrap.hidden = !S.open.Projects;
+  kids.forEach(n => wrap.append(file(n)));
+  tree.append(f, wrap);
+  const rs = mk('a', 'row', `${ic('download', 15)}<span class="l">Résumé.pdf</span>`); rs.href = 'resume.pdf'; rs.target = '_blank'; rs.rel = 'noopener'; tree.append(rs);
+  $('#sidefoot').innerHTML = `${ic('user', 14)}<span>Kunal Ghosh</span>`;
+}
+function renderTabs() {
+  const t = $('#tabs'); t.innerHTML = '';
+  S.tabs.forEach(id => {
+    const n = noteById(id) || { title:id.split('/').pop(), icon:'file' };
+    const el = mk('div', 'tab' + (id === S.active ? ' on' : ''), `${ic(n.icon || 'file', 14)}<span class="t">${esc(n.title)}</span>`);
+    el.setAttribute('role', 'tab'); el.setAttribute('aria-selected', id === S.active);
+    const x = mk('button', 'x', ic('x', 13)); x.title = 'Close'; x.setAttribute('aria-label', 'Close ' + n.title);
+    x.onclick = e => { e.stopPropagation(); closeTab(id); };
+    el.onclick = () => nav(id);
+    el.onauxclick = e => { if (e.button === 1) closeTab(id); };
+    el.append(x); t.append(el);
+    if (id === S.active) requestAnimationFrame(() => el.scrollIntoView({ block:'nearest', inline:'nearest' }));
+  });
+  $('#newtab').innerHTML = ic('plus', 17);
+  $('#rtoggle').innerHTML = ic('pright', 17);
+  $('#mmenu').innerHTML = ic('pleft', 18);
+}
+function renderHead() {
+  const n = noteById(S.active), parts = S.active.split('/');
+  const h = $('#vhead'); h.innerHTML = '';
+  const bk = mk('button', 'rbtn', ic('left', 17)); bk.title = 'Back'; bk.setAttribute('aria-label', 'Back'); bk.onclick = () => history.back();
+  const fw = mk('button', 'rbtn', ic('right', 17)); fw.title = 'Forward'; fw.setAttribute('aria-label', 'Forward'); fw.onclick = () => history.forward();
+  const cr = mk('div', 'crumbs', parts.map((p, i) => i < parts.length - 1 ? `<span>${esc(p)}</span><i>/</i>` : `<b>${esc(n ? n.title : p)}</b>`).join(''));
+  h.append(bk, fw, cr);
+  if (n?.kind === 'repo') {
+    const a = mk('a', 'rbtn', ic('github', 17)); a.href = 'https://github.com/' + n.repo; a.target = '_blank'; a.rel = 'noopener'; a.title = 'Open on GitHub'; a.setAttribute('aria-label', 'Open on GitHub'); h.append(a);
+  }
+}
+function renderRight() {
+  const r = $('#right'); r.innerHTML = '';
+  const head = mk('div', 'rhead');
+  [['tags', 'tag', 'Tags'], ['outline', 'list', 'Outline']].forEach(([k, i, t]) => {
+    const b = mk('button', 'rbtn' + (S.rpanel === k ? ' on' : ''), ic(i, 17)); b.title = t; b.setAttribute('aria-label', t);
+    b.onclick = () => { S.rpanel = k; renderRight(); }; head.append(b);
+  });
+  const list = mk('div', 'rlist');
+  if (S.rpanel === 'tags') {
+    list.append(mk('div', 'rtitle', 'All tags'));
+    tagCounts().forEach(([t, c]) => { const row = mk('div', 'tagrow', `<span>${esc(t)}</span><em>${c}</em>`); row.onclick = () => nav('tag/' + t); list.append(row); });
+  } else {
+    list.append(mk('div', 'rtitle', 'Outline'));
+    if (!S.outline.length) list.append(mk('div', 'empty', 'No headings in this note.'));
+    S.outline.forEach(h => { const row = mk('div', 'orow', esc(h.text)); row.style.paddingLeft = (10 + (h.level - 1) * 14) + 'px'; row.onclick = () => document.getElementById(h.id)?.scrollIntoView({ behavior:'smooth', block:'start' }); list.append(row); });
+  }
+  r.append(head, list);
+}
+function renderStatus() {
+  const n = noteById(S.active);
+  $('#status').innerHTML = `<span>${backlinks(S.active)} backlinks</span><span>${S.counts.w.toLocaleString()} words</span><span>${S.counts.c.toLocaleString()} characters</span>`;
+  document.title = (n ? n.title + ' — ' : '') + 'Kunal Ghosh';
+}
+function renderAll() { renderRibbon(); renderTree(); renderTabs(); renderHead(); renderMain(); renderRight(); }
+
+/* ───────────── main view ───────────── */
+function propsBlock(rows) {
+  if (!rows.length) return null;
+  const el = mk('div', 'props');
+  rows.forEach(([k, v]) => {
+    let val;
+    if (k === 'tags') val = v.map(t => `<a class="pill" href="#/tag/${encodeURI(t)}">${esc(t)}</a>`).join('');
+    else if (v && v.href) val = `<a href="${esc(v.href)}" target="_blank" rel="noopener noreferrer" style="color:var(--link)">${esc(v.text)}</a>`;
+    else val = esc(v);
+    const icn = { tags:'tag', type:'file', location:'pin', school:'cap', github:'github', repo:'github', language:'code', stars:'star', updated:'cal', license:'file', stack:'code', homepage:'link', gpa:'cap', graduating:'cal', description:'file' }[k] || 'file';
+    el.append(mk('div', 'prow', `<span class="pk">${ic(icn, 14)}${esc(k)}</span><span class="pv">${val}</span>`));
+  });
+  return el;
+}
+async function renderMain() {
+  const token = ++S.token; cancelAnimationFrame(S.raf);
+  const note = $('#note'), scroll = $('#scroll'); note.innerHTML = ''; scroll.scrollTop = 0;
+  scroll.style.overflow = ''; $('.graph')?.remove(); note.style.display = '';
+  S.outline = []; S.counts = { w:0, c:0 };
+  const n = noteById(S.active);
+  if (!n) {
+    note.append(mk('h1', 'inline-title', esc(S.active.split('/').pop())), mk('div', 'md', `<div class="callout" style="--c:233,151,63"><div class="callout-title">${ic('alert', 17)}<span>Note not found</span></div><div class="callout-content"><p>This page doesn't exist in the vault${S.active.startsWith('Projects/') ? ' — that repo may not be selected yet.' : '.'} <a class="wikilink" href="#/Home">Go home</a>.</p></div></div>`));
+    return finish(token);
+  }
+  if (n.kind === 'graph') { scroll.style.overflow = 'hidden'; note.style.display = 'none'; renderGraph(scroll); return finish(token, true); }
+  if (n.kind === 'tag') {
+    const t = n.id.slice(4), hits = allNotes().filter(x => (x.tags || []).includes(t));
+    note.append(mk('h1', 'inline-title', '#' + esc(t)));
+    const m = mk('div', 'md'); m.append(mk('p', '', `${hits.length} note${hits.length === 1 ? '' : 's'} tagged <code>${esc(t)}</code>`));
+    const ul = mk('ul'); hits.forEach(h => ul.append(mk('li', '', `<a class="wikilink" href="#/${encodeURI(h.id)}">${esc(h.title)}</a>${h.sub ? ' — ' + esc(h.sub) : ''}`))); m.append(ul);
+    note.append(m); return finish(token);
+  }
+
+  note.append(mk('h1', 'inline-title', esc(n.title)));
+  const rows = [];
+  if (n.kind === 'repo') {
+    const m = await loadMeta(n.repo); if (token !== S.token) return;
+    rows.push(['repo', { href:'https://github.com/' + n.repo, text:n.repo }]);
+    if (m?.description) rows.push(['description', m.description]);
+    if (m?.language) rows.push(['language', m.language]);
+    if (m) rows.push(['stars', String(m.stars)], ['updated', fmtDate(m.pushed)]);
+    if (m?.license && m.license !== 'NOASSERTION') rows.push(['license', m.license]);
+    if (m?.homepage) rows.push(['homepage', { href:m.homepage, text:m.homepage }]);
+    rows.push(['tags', allNotes().find(x => x.id === n.id)?.tags || []]);
+  } else {
+    (n.props || []).forEach(p => rows.push(p));
+    if (n.tags?.length) rows.push(['tags', n.tags]);
+  }
+  const pb = propsBlock(rows); if (pb) note.append(pb);
+
+  if (n.kind === 'repo') {
+    const holder = mk('div', 'md', '<div class="skel" style="width:60%"></div><div class="skel"></div><div class="skel" style="width:85%"></div><div class="skel" style="width:40%"></div>');
+    note.append(holder);
     try {
-      const saved = localStorage.getItem(RESUME_KEY);
-      renderResume(saved ? JSON.parse(saved) : BAKED_RESUME);
-    } catch(e) {
-      renderResume(BAKED_RESUME);
+      const txt = await loadReadme(n.repo); if (token !== S.token) return;
+      holder.replaceWith(mdToEl(txt, { repo:n.repo }));
+    } catch (e) {
+      if (token !== S.token) return;
+      holder.replaceWith(mk('div', 'md', `<div class="callout" style="--c:233,151,63"><div class="callout-title">${ic('alert', 17)}<span>Couldn't load the README</span></div><div class="callout-content"><p>GitHub may be rate-limiting this browser, or the repo has no README. <a href="https://github.com/${esc(n.repo)}" target="_blank" rel="noopener noreferrer">Open it on GitHub</a>.</p></div></div>`));
     }
-  })();
+  } else {
+    note.append(mdToEl(n.md || ''));
+    if (n.kind === 'gallery') renderGallery(note);
+    if (n.kind === 'custom' && S.editing) {
+      const b = mk('button', 'chip', ic('pencil', 13) + 'Edit note'); b.style.marginTop = '24px'; b.onclick = () => openNoteEditor(n.cid); note.append(b);
+    }
+  }
+  finish(token);
+}
+function finish(token, skipCount) {
+  if (token !== S.token) return;
+  const note = $('#note');
+  S.outline = $$('.md h1,.md h2,.md h3,.md h4', note).map(h => ({ id:h.id, text:h.textContent, level:+h.tagName[1] }));
+  if (!skipCount) {
+    const body = $$('.md', note).map(e => e.textContent).join(' ');
+    S.counts = { w:(body.trim().match(/\S+/g) || []).length, c:body.length };
+  }
+  renderRight(); renderStatus(); renderRibbon();
+}
 
-  </script>
+/* README tables of contents must not hijack the hash router */
+document.addEventListener('click', e => {
+  const a = e.target.closest('.md a[href^="#"]'); if (!a) return;
+  const h = a.getAttribute('href'); if (h.startsWith('#/')) return;
+  e.preventDefault(); let id = h.slice(1); try { id = decodeURIComponent(id); } catch (x) {}
+  document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' });
+});
+
+/* ───────────── gallery ───────────── */
+function renderGallery(host) {
+  const g = mk('div', 'gallery');
+  S.cfg.gallery.forEach((it, i) => {
+    const target = it.route ? '#/' + encodeURI(it.route) : (safeUrl(it.url) || '#');
+    const a = mk('a', 'gi'); a.href = target;
+    if (!it.route && /^https?:/i.test(target)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    const img = safeUrl(it.image);
+    let h = 0; for (const c of it.title) h = (h * 31 + c.charCodeAt(0)) % 360;
+    const mono = it.title.replace(/[^A-Za-z0-9 ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '·';
+    a.innerHTML = `<div class="thumb">${img ? `<img src="${esc(img)}" alt="${esc(it.title)}" loading="lazy">` : `<div class="ph" style="background-color:hsl(${h} 12% 15%)"><b>${esc(mono)}</b></div>`}<div class="shade">${esc(it.sub || '')}</div></div><div class="cap"><b>${esc(it.title)}</b><span>${esc(it.sub || '')}</span></div>`;
+    const tools = mk('div', 'gtools');
+    const eb = mk('button', '', ic('pencil', 14)); eb.title = 'Edit'; eb.setAttribute('aria-label', 'Edit ' + it.title);
+    eb.onclick = e => { e.preventDefault(); e.stopPropagation(); openGalleryEditor(i); };
+    const db = mk('button', '', ic('trash', 14)); db.title = 'Remove'; db.setAttribute('aria-label', 'Remove ' + it.title);
+    db.onclick = e => { e.preventDefault(); e.stopPropagation(); S.cfg.gallery.splice(i, 1); saveDraft(); renderMain(); };
+    tools.append(eb, db); a.append(tools); g.append(a);
+  });
+  const add = mk('button', 'gadd', ic('plus', 22) + '<span>Add project</span>'); add.onclick = () => openGalleryEditor(-1); g.append(add);
+  host.append(g);
+}
+
+/* ───────────── graph view ───────────── */
+function renderGraph(host) {
+  const wrap = mk('div', 'graph'); const cv = mk('canvas'); wrap.append(cv);
+  wrap.append(mk('div', 'glegend', '<span><i style="background:#a99cf7"></i>note</span><span><i style="background:#6fae5c"></i>repo README</span><span><i style="background:#6d6862"></i>tag</span>'));
+  host.append(wrap);
+  const notes = allNotes(), nodes = [], idx = {}, edges = [];
+  notes.forEach(n => { idx[n.id] = nodes.length; nodes.push({ id:n.id, label:n.title, type:n.kind === 'repo' ? 'repo' : 'note', deg:0 }); });
+  const link = (a, b) => { if (a != null && b != null && a !== b) edges.push([a, b]); };
+  notes.forEach(n => {
+    if (n.md) [...n.md.matchAll(/\[\[([^\]|\n]+)/g)].forEach(m => { const t = findNote(m[1].trim()); if (t) link(idx[n.id], idx[t.id]); });
+    if (n.folder === 'Projects') link(idx['Home'], idx[n.id]);
+  });
+  ['Experience', 'Education', 'Skills', 'Portfolio', 'Contact'].forEach(t => link(idx['Home'], idx[t]));
+  tagCounts().filter(([, c]) => c >= 2).forEach(([t]) => {
+    const i = nodes.length; nodes.push({ id:'tag/' + t, label:'#' + t, type:'tag', deg:0 });
+    notes.forEach(n => { if ((n.tags || []).includes(t)) link(idx[n.id], i); });
+  });
+  edges.forEach(([a, b]) => { nodes[a].deg++; nodes[b].deg++; });
+  nodes.forEach((n, i) => { const a = i / nodes.length * 6.283; n.x = Math.cos(a) * 160 + Math.random() * 20; n.y = Math.sin(a) * 160 + Math.random() * 20; n.vx = n.vy = 0; });
+  const css = getComputedStyle(document.documentElement), col = { note:'#a99cf7', repo:'#6fae5c', tag:'#6d6862', text:css.getPropertyValue('--text').trim(), mute:css.getPropertyValue('--faint').trim(), acc:css.getPropertyValue('--accent').trim() };
+  const ctx = cv.getContext('2d'); let W = 0, H = 0, alpha = 1, hover = -1, drag = -1, moved = false, k = 1;
+  const size = () => { const r = wrap.getBoundingClientRect(), d = window.devicePixelRatio || 1; W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
+  size(); new ResizeObserver(size).observe(wrap);
+  const rad = n => (n.type === 'tag' ? 3.5 : 5) + Math.min(n.deg, 8) * .6;
+  const nb = new Set();
+  const setHover = h => { hover = h; nb.clear(); if (h >= 0) { nb.add(h); edges.forEach(([a, b]) => { if (a === h) nb.add(b); if (b === h) nb.add(a); }); } };
+  function step() {
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const A = nodes[i], B = nodes[j]; let dx = A.x - B.x, dy = A.y - B.y; const d2 = dx * dx + dy * dy + .5, d = Math.sqrt(d2), f = 2600 / d2 * alpha;
+      dx /= d; dy /= d; A.vx += dx * f; A.vy += dy * f; B.vx -= dx * f; B.vy -= dy * f;
+    }
+    edges.forEach(([a, b]) => { const A = nodes[a], B = nodes[b], dx = B.x - A.x, dy = B.y - A.y, d = Math.sqrt(dx * dx + dy * dy) + .01, f = (d - 78) * .018 * alpha; A.vx += dx / d * f; A.vy += dy / d * f; B.vx -= dx / d * f; B.vy -= dy / d * f; });
+    nodes.forEach((n, i) => { n.vx -= n.x * .004 * alpha; n.vy -= n.y * .004 * alpha; if (i === drag) { n.vx = n.vy = 0; return; } n.vx *= .8; n.vy *= .8; n.x += n.vx; n.y += n.vy; });
+    alpha = Math.max(alpha * .985, .02);
+  }
+  const fit = () => { let m = 1; nodes.forEach(n => { m = Math.max(m, Math.abs(n.x) / Math.max(W / 2 - 70, 40), Math.abs(n.y) / Math.max(H / 2 - 40, 40)); }); return 1 / m; };
+  function draw() {
+    ctx.clearRect(0, 0, W, H); k += (Math.min(1, fit()) - k) * .08;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(k, k);
+    edges.forEach(([a, b]) => { const A = nodes[a], B = nodes[b], on = hover >= 0 && (a === hover || b === hover); ctx.strokeStyle = on ? col.acc : 'rgba(180,170,160,' + (hover >= 0 ? .07 : .2) + ')'; ctx.lineWidth = on ? 1.4 : 1; ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke(); });
+    nodes.forEach((n, i) => {
+      const dim = hover >= 0 && !nb.has(i);
+      ctx.globalAlpha = dim ? .18 : 1; ctx.fillStyle = i === hover ? col.acc : col[n.type]; ctx.beginPath(); ctx.arc(n.x, n.y, rad(n), 0, 6.283); ctx.fill();
+      if (n.id === S.active) { ctx.strokeStyle = col.text; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(n.x, n.y, rad(n) + 3, 0, 6.283); ctx.stroke(); }
+      ctx.font = (i === hover ? '500 ' : '') + '11.5px JetBrains Mono, monospace'; ctx.fillStyle = i === hover ? col.text : col.mute; ctx.textAlign = 'center';
+      ctx.fillText(n.label.length > 26 ? n.label.slice(0, 25) + '…' : n.label, n.x, n.y + rad(n) + 13);
+    });
+    ctx.restore(); ctx.globalAlpha = 1;
+  }
+  const loop = () => { step(); draw(); S.raf = requestAnimationFrame(loop); };
+  for (let i = 0; i < 120; i++) step(); loop();
+  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left - W / 2) / k, (e.clientY - r.top - H / 2) / k]; };
+  const pick = (x, y) => { let best = -1, bd = 1e9; nodes.forEach((n, i) => { const d = Math.hypot(n.x - x, n.y - y); if (d < rad(n) + 8 && d < bd) { bd = d; best = i; } }); return best; };
+  cv.addEventListener('pointermove', e => { const [x, y] = pos(e); if (drag >= 0) { nodes[drag].x = x; nodes[drag].y = y; moved = true; alpha = Math.max(alpha, .3); } else { const h = pick(x, y); if (h !== hover) setHover(h); cv.style.cursor = h >= 0 ? 'pointer' : 'default'; } });
+  cv.addEventListener('pointerdown', e => { const [x, y] = pos(e), h = pick(x, y); if (h >= 0) { drag = h; moved = false; setHover(h); cv.setPointerCapture(e.pointerId); } });
+  cv.addEventListener('pointerup', () => { if (drag >= 0 && !moved) { const id = nodes[drag].id; drag = -1; nav(id); return; } drag = -1; });
+  cv.addEventListener('pointerleave', () => setHover(-1));
+}
+
+/* ───────────── modals ───────────── */
+function modal(html, mount, wide) {
+  const bg = mk('div', 'mbg'); const m = mk('div', 'modal', html); if (wide) m.style.maxWidth = wide; bg.append(m);
+  const close = () => bg.remove(); bg.addEventListener('mousedown', e => { if (e.target === bg) close(); });
+  document.body.append(bg); mount?.(m, close); return close;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') $$('.mbg').forEach(m => m.remove());
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && !e.shiftKey && e.key.toLowerCase() === 'o') { e.preventDefault(); openSwitcher(); }
+  if (mod && e.shiftKey && e.key.toLowerCase() === 'e') { e.preventDefault(); setEditing(!S.editing); }
+});
+function openSwitcher() {
+  if ($('.mbg')) return;
+  modal(`<input class="sw-in" placeholder="Jump to note…" aria-label="Jump to note"><div class="sw-list"></div>`, (m, close) => {
+    const inp = $('.sw-in', m), list = $('.sw-list', m); let sel = 0, items = [];
+    const draw = () => {
+      const q = inp.value.toLowerCase().trim();
+      items = [...allNotes(), { id:'graph', title:'Graph view', folder:'', icon:'graph', tags:[] }].filter(n => !q || n.title.toLowerCase().includes(q) || (n.tags || []).some(t => t.includes(q)) || n.folder.toLowerCase().includes(q));
+      sel = Math.min(sel, Math.max(items.length - 1, 0)); list.innerHTML = '';
+      items.forEach((n, i) => { const r = mk('div', 'sw-item' + (i === sel ? ' sel' : ''), `${ic(n.icon || 'file', 15)}<span>${esc(n.title)}</span><small>${esc(n.folder || '')}</small>`); r.onclick = () => { close(); nav(n.id); }; list.append(r); });
+      if (!items.length) list.append(mk('div', 'empty', 'No matching notes.'));
+      $('.sel', list)?.scrollIntoView({ block:'nearest' });
+    };
+    inp.oninput = () => { sel = 0; draw(); };
+    inp.onkeydown = e => { if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, items.length - 1); draw(); e.preventDefault(); } if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); } if (e.key === 'Enter' && items[sel]) { close(); nav(items[sel].id); } };
+    draw(); setTimeout(() => inp.focus(), 20);
+  });
+}
+
+/* ───────────── edit mode: drafts only; publishing = commit site-config.json ───────────── */
+function setEditing(on) {
+  S.editing = on; ss.set('editing', on ? '1' : '0'); document.body.classList.toggle('editing', on);
+  if (on) { const d = ls.get(DRAFT_KEY); if (d) { try { S.cfg = normalize(JSON.parse(d)); } catch (e) {} } toast('Edit mode on — changes stay drafts until you export and commit site-config.json'); }
+  else { S.cfg = structuredClone(S.committed); toast('Edit mode off'); }
+  prefetchMeta().then(renderAll); renderAll();
+}
+function saveDraft() { ls.set(DRAFT_KEY, JSON.stringify(S.cfg)); renderTree(); renderRight(); }
+function exportCfg() {
+  const blob = new Blob([JSON.stringify(S.cfg, null, 2) + '\n'], { type:'application/json' });
+  const a = mk('a'); a.href = URL.createObjectURL(blob); a.download = 'site-config.json'; document.body.append(a); a.click(); a.remove();
+  toast('Exported. Commit site-config.json to the repo root to publish.');
+}
+function discardDraft() {
+  if (!confirm('Discard the local draft and go back to the committed site-config.json?')) return;
+  ls.del(DRAFT_KEY); S.cfg = structuredClone(S.committed); S.tabs = S.tabs.filter(t => noteById(t)); if (!noteById(S.active)) nav('Home'); else renderAll(); toast('Draft discarded');
+}
+function openRepoPicker() {
+  const sel = new Set(S.cfg.repos.map(r => r.repo)); let list = null, err = '';
+  modal(`<div class="mhead">Choose repositories</div><div class="mbody"><p class="hint">Each selected repo becomes a page under <b>Projects</b>, rendered from its README.</p><div class="rplist" id="rpl"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div><label class="f">Or add any public repo (owner/name)</label><div style="display:flex;gap:8px"><input class="inp" id="rpm" placeholder="vllknny/some-repo"><button class="btn" id="rpa">Add</button></div></div><div class="mfoot"><button class="btn" id="rpc">Cancel</button><button class="btn pri" id="rps">Apply</button></div>`, (m, close) => {
+    const box = $('#rpl', m);
+    const draw = () => {
+      box.innerHTML = '';
+      const rows = [...(list || []).map(r => ({ repo:r.full_name, desc:r.description, lang:r.language, stars:r.stargazers_count, fork:r.fork })),
+        ...[...sel].filter(r => !(list || []).some(x => x.full_name === r)).map(r => ({ repo:r, desc:'', lang:'', stars:null }))];
+      if (err) box.append(mk('div', 'hint', esc(err)));
+      rows.forEach(r => {
+        const row = mk('label', 'rp', `<input type="checkbox" ${sel.has(r.repo) ? 'checked' : ''}><span><b>${esc(r.repo.split('/')[1])}</b>${r.fork ? ' <small style="display:inline">fork</small>' : ''}<small>${esc(r.desc || r.repo)}</small></span><span class="meta">${esc(r.lang || '')}${r.stars != null ? ' · ★' + r.stars : ''}</span>`);
+        $('input', row).onchange = e => { e.target.checked ? sel.add(r.repo) : sel.delete(r.repo); };
+        box.append(row);
+      });
+    };
+    draw();
+    fetch(`https://api.github.com/users/${S.cfg.user}/repos?per_page=100&sort=pushed`, { headers:{ Accept:'application/vnd.github+json' } })
+      .then(r => { if (!r.ok) throw new Error(r.status === 403 ? 'GitHub rate limit hit — add repos by name below.' : 'Could not list repos — add them by name below.'); return r.json(); })
+      .then(j => { list = j; draw(); }).catch(e => { err = e.message; draw(); });
+    $('#rpa', m).onclick = () => { const v = $('#rpm', m).value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, ''); if (/^[\w.-]+\/[\w.-]+$/.test(v)) { sel.add(v); $('#rpm', m).value = ''; draw(); } else toast('Use the form owner/name'); };
+    $('#rpc', m).onclick = close;
+    $('#rps', m).onclick = () => {
+      const keep = S.cfg.repos.filter(r => sel.has(r.repo)), have = new Set(keep.map(r => r.repo));
+      [...sel].forEach(r => { if (!have.has(r)) keep.push({ repo:r }); });
+      S.cfg.repos = keep; saveDraft(); close();
+      S.tabs = S.tabs.filter(t => noteById(t)); if (!noteById(S.active)) nav('Home'); else renderAll();
+      prefetchMeta().then(renderAll);
+    };
+  });
+}
+function openNoteEditor(cid) {
+  const ex = S.cfg.notes.find(n => n.id === cid);
+  modal(`<div class="mhead">${ex ? 'Edit note' : 'New note'}</div><div class="mbody"><label class="f">Title</label><input class="inp" id="nt" value="${esc(ex?.title || '')}"><label class="f">Folder</label><select class="inp" id="nf"><option value="">Vault root</option><option value="Projects" ${ex?.folder === 'Projects' ? 'selected' : ''}>Projects</option></select><label class="f">Tags (comma-separated)</label><input class="inp" id="ng" value="${esc((ex?.tags || []).join(', '))}"><label class="f">Markdown — supports [[wikilinks]] and &gt; [!callouts]</label><textarea class="ta" id="nb">${esc(ex?.body || '')}</textarea></div><div class="mfoot">${ex ? '<button class="btn danger" id="nd" style="margin-right:auto">Delete</button>' : ''}<button class="btn" id="nc">Cancel</button><button class="btn pri" id="ns">Save</button></div>`, (m, close) => {
+    $('#nc', m).onclick = close;
+    $('#nd', m)?.addEventListener('click', () => { S.cfg.notes = S.cfg.notes.filter(n => n.id !== cid); saveDraft(); close(); S.tabs = S.tabs.filter(t => noteById(t)); nav('Home'); renderAll(); });
+    $('#ns', m).onclick = () => {
+      const title = $('#nt', m).value.trim().replace(/[\/\\]/g, '-'); if (!title) return toast('Give the note a title');
+      const o = { id:ex?.id || 'n' + Math.random().toString(36).slice(2, 8), title, folder:$('#nf', m).value, tags:$('#ng', m).value.split(',').map(t => t.trim().toLowerCase()).filter(Boolean), body:$('#nb', m).value };
+      if (ex) Object.assign(ex, o); else S.cfg.notes.push(o);
+      saveDraft(); close(); nav((o.folder ? o.folder + '/' : '') + o.title); renderAll();
+    };
+  }, '680px');
+}
+function openGalleryEditor(i) {
+  const ex = i >= 0 ? S.cfg.gallery[i] : null; let img = ex?.image || '';
+  const opts = allNotes().filter(n => n.kind !== 'gallery').map(n => `<option value="${esc(n.id)}" ${ex?.route === n.id ? 'selected' : ''}>${esc(n.id)}</option>`).join('');
+  modal(`<div class="mhead">${ex ? 'Edit portfolio item' : 'Add portfolio item'}</div><div class="mbody"><label class="f">Title</label><input class="inp" id="gt" value="${esc(ex?.title || '')}"><label class="f">Subtitle</label><input class="inp" id="gs" value="${esc(ex?.sub || '')}" placeholder="Python · PyTorch"><label class="f">Links to</label><select class="inp" id="gr"><option value="">External URL ↓</option>${opts}</select><input class="inp" id="gu" style="margin-top:8px" placeholder="https://…" value="${esc(ex?.url || '')}"><label class="f">Cover image</label><input class="inp" type="file" id="gf" accept="image/*"><input class="inp" id="gi" style="margin-top:8px" placeholder="…or an image URL / path in the repo, e.g. images/ssampler.png" value="${esc(img.startsWith('data:') ? '' : img)}"><p class="hint">Uploads are resized to 1000px and embedded in site-config.json. For a lighter page, commit the image to the repo and use its path instead.</p></div><div class="mfoot"><button class="btn" id="gc">Cancel</button><button class="btn pri" id="gsv">Save</button></div>`, (m, close) => {
+    $('#gc', m).onclick = close;
+    $('#gf', m).onchange = e => {
+      const f = e.target.files[0]; if (!f) return; const url = URL.createObjectURL(f), im = new Image();
+      im.onload = () => { const s = Math.min(1, 1000 / im.width), c = mk('canvas'); c.width = im.width * s; c.height = im.height * s; c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); img = c.toDataURL('image/jpeg', .82); URL.revokeObjectURL(url); toast('Image ready'); };
+      im.onerror = () => toast('Could not read that image'); im.src = url;
+    };
+    $('#gsv', m).onclick = () => {
+      const title = $('#gt', m).value.trim(); if (!title) return toast('Give it a title');
+      const typed = $('#gi', m).value.trim(), o = { title, sub:$('#gs', m).value.trim(), route:$('#gr', m).value, url:$('#gu', m).value.trim(), image:typed || img };
+      if (o.url && !/^https?:\/\//i.test(o.url)) return toast('That link must start with http(s)://');
+      if (i >= 0) S.cfg.gallery[i] = o; else S.cfg.gallery.push(o);
+      saveDraft(); close(); renderMain();
+    };
+  });
+}
+async function prefetchMeta() { await Promise.all(S.cfg.repos.map(r => loadMeta(r.repo))); }
+
+/* ───────────── boot ───────────── */
+async function boot() {
+  $('#newtab').onclick = openSwitcher;
+  $('#rtoggle').onclick = () => document.body.classList.toggle('no-right');
+  $('#mmenu').onclick = () => document.body.classList.toggle('side-open');
+  $('#sidebar').addEventListener('click', e => { if (e.target.closest('a.row') && innerWidth <= 760) document.body.classList.remove('side-open'); });
+  try { const r = await fetch('site-config.json', { cache:'no-store' }); if (r.ok) S.committed = normalize(await r.json()); } catch (e) {}
+  S.cfg = structuredClone(S.committed);
+  if (S.editing) { document.body.classList.add('editing'); const d = ls.get(DRAFT_KEY); if (d) { try { S.cfg = normalize(JSON.parse(d)); } catch (e) {} } }
+  if (innerWidth <= 1100) document.body.classList.add('no-right');
+  openNote(idFromHash());
+  prefetchMeta().then(() => { renderTree(); renderRight(); if (S.active === 'Home' || S.active === 'graph') renderMain(); });
+}
+boot();
+})();
+</script>
 </body>
 </html>
