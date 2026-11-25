@@ -34,7 +34,8 @@ a{color:inherit;text-decoration:none}
 *{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
 
 /* ── shell ── */
-#app{display:grid;grid-template-columns:44px var(--lw) minmax(0,1fr) var(--rw);height:100vh;height:100dvh}
+#app{display:grid;grid-template-columns:44px var(--lw) minmax(0,1fr) var(--rw);grid-template-rows:minmax(0,1fr);height:100vh;height:100dvh;overflow:hidden}
+#ribbon,#left,#main,#right{min-height:0}
 #app.no-left{--lw:0px}
 #app.no-right{--rw:0px}
 #ribbon{background:var(--side);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;border-right:1px solid var(--line)}
@@ -53,7 +54,7 @@ a{color:inherit;text-decoration:none}
 .vault h2 small{color:var(--faint);font-weight:400;font-size:11px;margin-left:6px}
 .sb{width:30px;height:30px;display:grid;place-items:center;border-radius:6px;color:var(--dim)}
 .sb:hover{background:var(--hover);color:var(--text)}
-#tree{flex:1;overflow:auto;padding:6px 8px 12px}
+#tree{flex:1 1 0;min-height:0;overflow:auto;padding:6px 8px 12px}
 .row{display:flex;align-items:center;gap:8px;height:31px;padding:0 10px;border-radius:5px;color:var(--dim);cursor:pointer;font-size:13.5px;white-space:nowrap}
 .row span{overflow:hidden;text-overflow:ellipsis}
 .row:hover{background:var(--hover);color:var(--text)}
@@ -85,7 +86,7 @@ a{color:inherit;text-decoration:none}
 #crumb{flex:1;min-width:0;display:flex;gap:8px;align-items:center;color:var(--dim);font-size:13.5px;padding-left:8px;white-space:nowrap;overflow:hidden}
 #crumb .sep{color:var(--faint)}
 #crumb b{font-weight:500;color:var(--strong);overflow:hidden;text-overflow:ellipsis}
-#scroll{flex:1;overflow:auto;position:relative;scroll-behavior:smooth}
+#scroll{flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;position:relative;scroll-behavior:smooth;overscroll-behavior:contain}
 #scroll.graph-mode{overflow:hidden}
 .note{max-width:800px;margin:0 auto;padding:30px 44px 140px}
 .inline-title{font-size:2.05rem;line-height:1.25;font-weight:600;color:var(--strong);margin-bottom:18px;letter-spacing:-.01em}
@@ -170,7 +171,7 @@ a.tag:hover{background:rgba(127,182,133,.26)}
 .rb2:hover{background:var(--hover);color:var(--text)}.rb2.on{background:var(--active);color:var(--strong)}
 #tagfilter{margin:4px 14px 6px;padding:6px 10px;background:rgba(0,0,0,.18);border:1px solid var(--line-2);border-radius:6px;font-size:12.5px;width:calc(100% - 28px);outline:none}
 #tagfilter:focus{border-color:var(--accent)}
-#rbody{flex:1;overflow:auto;padding:4px 10px 16px}
+#rbody{flex:1 1 0;min-height:0;overflow:auto;padding:4px 10px 16px}
 .tagrow{display:flex;justify-content:space-between;gap:10px;padding:5px 14px;border-radius:5px;color:var(--dim);font-size:14px;cursor:pointer}
 .tagrow:hover{background:var(--hover);color:var(--text)}
 .tagrow i{font-style:normal;color:var(--faint)}
@@ -214,7 +215,7 @@ a.tag:hover{background:rgba(127,182,133,.26)}
 #scrim{display:none}
 /* ── mobile ── */
 @media (max-width:860px){
-  #app{grid-template-columns:minmax(0,1fr)}
+  #app{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
   #ribbon{display:none}
   #left,#right{position:fixed;top:0;bottom:0;z-index:50;width:min(86vw,330px);transition:transform .22s;visibility:visible!important}
   #left{left:0;transform:translateX(-102%)}#right{right:0;transform:translateX(102%)}
@@ -362,18 +363,20 @@ const ic = (n, s = 16) => `<svg class="ic" width="${s}" height="${s}" viewBox="0
    ════════════════════════════════════════════════════════════ */
 const NOTES = {
   home: { id:'home', title:'Home', folder:'', tags:['audio','machine-learning','dsp'],
-    props:[['user','name','Kunal Ghosh'],['pin','location','Harrisburg, PA'],['cap','school','Penn State · B.E. Computational Data Science'],['clock','audio since','2009'],['link','profiles','@LINKS']],
-    md:`Computational data science major at Penn State, and an audio engineer since 2009. My work sits between **signal processing**, **machine learning** and **software**.
+    props:[['user','name','Kunal Ghosh'],['user','pronouns','they/them'],['pin','location','Harrisburg, PA'],['cap','school','Penn State · B.S. Computational Data Science'],['code','focus','DSP · machine learning · data engineering'],['link','profiles','@LINKS']],
+    md:`Computational data science major at Penn State, with minors in Economics and Artificial Intelligence. My work sits between **DSP**, **machine learning** and **data engineering**.
 
 > [!quote] working hard or hardly working
 
-From 2020 to 2023 I was contracted by Meta Research to integrate ML components into the DSP pipelines behind transformer-based audio stem separation (Demucs v4). The details are in [[Experience]].
+In summer 2026 I was a software and data engineering intern at Exydoc. Before that I spent years as a DSP engineer writing low-latency audio code, and I contributed to Demucs v4 at Meta as an open-source contributor and contractor. Details are in [[Experience]] and [[Research]].
 
 ## Vault
 
-- [[Experience]] — Meta Research, audio engineering, résumé projects
-- [[Education]] — Penn State, coursework, organizations
-- [[Skills]] — languages, ML tooling, certifications
+- [[Experience]] — Exydoc, DSP engineering, tutoring
+- [[Research]] — topology and network data analysis, Demucs v4 at Meta
+- [[Honors]] — HackPSU placement, infrastructure renovation, audio production
+- [[Education]] — Penn State
+- [[Skills]] — tools and technologies
 - [[Contact]] — email, phone, LinkedIn
 
 ## Projects
@@ -382,96 +385,111 @@ Each page below is pulled live from the repository's README on GitHub.
 
 <div data-slot="projects"></div>` },
 
-  experience: { id:'experience', title:'Experience', folder:'Résumé', tags:['audio','dsp','machine-learning','cuda','python'],
-    props:[['clock','span','2009 – 2024'],['pin','based in','Harrisburg, PA']],
+  experience: { id:'experience', title:'Experience', folder:'Résumé', tags:['audio','dsp','nlp','sql','python','powerbi'],
+    props:[['clock','span','2018 – 2026'],['pin','based in','Harrisburg, PA']],
     md:`## Work
 
-### Meta — Demucs v4 / AI Engineer
-*June 2020 – September 2023 · United States*
+### Exydoc — Software and Data Engineering Intern
+*May 2026 – August 2026 · Harrisburg, PA*
 
-- Contracted by Meta Research to integrate ML-powered components into DSP pipelines supporting transformer-based audio stem separation models trained on the MUSDB dataset (~150+ multitrack songs).
-- Implemented a CUDA-accelerated hybrid transformer architecture to optimize stems and reduce processing latency.
-- Developed spectrogram analysis & normalization routines enabling automated feature extraction across 1000s of audio frames per track.
+- Developed an attorney-to-client industry-unique SaaS to organize documents via NLP to save 70% CRM time.
+- Created PowerBI dashboards and data architecture diagrams for insurance clients, revealing new networks.
+- Analyzed ETL failures in nightly pipelines using SQL and Python, cutting rerun incidents and backlog.
+- Explored MySQL tables to reduce query execution time for reports, simulate user stories, and optimize ETL.
 
-### Self Employed — Audio Engineer
-*October 2009 – May 2024 · Harrisburg, PA*
+### Contract — DSP Engineer
+*October 2018 – May 2024 · Harrisburg, PA*
 
-- Delivered high-reliability audio systems under real-world constraints (latency, quality, repeatability).
-- Developed a deep intuition for signal behavior, debugging complex systems, and iterative refinement.
-- Engineered 2,000+ movies, songs, and audio, optimizing workflows through automation and signals.
+- Produced fixed-point DSP algorithms for low-latency embedded audio processors using C and Assembly.
+- Optimized convolution reverb routines using FFT libraries to cut processing latency on real-time streams.
+- Integrated low-latency I2S drivers with DMA on custom boards to lower audio dropouts during playback.
+- Developed strong debugging, systems-thinking, and iterative optimization skills applicable to software.
 
-## Projects from my résumé
+### Kumon — Mathematics and English Tutor
+*June 2021 – January 2024 · Harrisburg, PA*
 
-### Topology Research Analysis
-*Python, Docker, SciPy, Data Visualization*
+- Tutored K–12 students in both mathematics and comprehension, strengthening analytical reasoning.
+- Adapted instruction to individual learning styles and tracked student progress across multiple subject areas.
+- Communicated complex concepts and problematic situations clearly and effectively to students and parents.` },
 
-- Led development of an open-source research support framework designed to streamline topology-focused experiments and lab workflows.
-- Engineered modular services and utilities for scientific computing, containerized reproducible research environments, and automated tooling for dataset processing and visualization.
-- Developed flexible API endpoints and automation scripts to support interactive data exploration and models.
+  research: { id:'research', title:'Research', folder:'Résumé', tags:['research','dsp','machine-learning','cuda','python','r','docker'],
+    props:[['cap','affiliation','Penn State · Meta (Demucs v4)']],
+    md:`## Topology and Network Data Analysis
+*Pennsylvania State University · with Dr. Yubai Yuan*
+*Python, Docker, SciPy, MatPlotLib, R*
 
-### JUCE Audio Intelligence Platform
-*C++, Rust, Hugging Face, DeMucs v4 · Related repo: [[ssampler]]*
+- Developed an open-source research framework for topology-focused data analysis and visualization workflows.
+- Containerized reproducible computing environments using Docker to improve research portability.
+- Built automation tools for dataset processing, exploratory analysis, and scientific visualization.
 
-- Built modular object-oriented applications for audio signal processing and analysis.
-- Integrated machine learning components into DSP pipelines while maintaining performance constraints.
-- Implemented transformer-based audio stem separation using DeMucs v4 architectures.
-- Applied spectrogram analysis and normalization algorithms for improved feature extraction.
+## Meta — AI and DSP Engineer
+*Demucs v4 · OSS contributor & contract · Related repo: [[ssampler]]*
 
-### Monte Carlo Financial Return Simulator
-*Python, PyTorch, yFinance*
+- Implemented and evaluated transformer-based audio source separation workflows using Demucs v4 architectures.
+- Optimized GPU-accelerated processing pipelines with CUDA to improve model performance and reduce runtime.
+- Developed spectrogram preprocessing and normalization pipelines for automated feature extraction.
+- Contributed to the large-scale audio dataset MUSDB HD & machine learning workflows for signal-processing.` },
 
-- Built a stochastic simulation engine using REST APIs to analyze historical and forecasted market returns.
-- Implemented probabilistic modeling techniques (Brownian motion concepts, Ito-inspired reasoning) to support predictive analytics, as well as importing crucial international business data recorded by the CQF Institute.` },
+  honors: { id:'honors', title:'Honors', folder:'Résumé', tags:['hackathon','audio','dsp','react','python'],
+    props:[['star','highlight','4th place, HackPSU']],
+    md:`## Anchor — Financial Literacy Program
+*HackPSU · Python, JavaScript, PostgreSQL, Prisma, React*
+*Team: Aditiya Turaga, Ayush Pandajee*
+
+- Won 4th place at HackPSU with an industry-unique paper trading simulator targeted towards learning finance.
+- Implemented secure authentication, portfolio tracking, and data persistence using PostgreSQL and Prisma.
+- Processed historical market data to generate portfolio-performance metrics and interactive time-series graphs.
+
+## Harrisburg Infrastructure Renovation
+*Pennsylvania State Government × FIRST · AutoCAD, Structure Analysis, Microsoft Office*
+*With Mayor Eric Papenfuse and M. BYTES*
+
+- Communicated with state officials and the Governor of PA on renovating a public sector of the city to improve accessibility to people with disabilities and public transport vehicles.
+- Collaborated with engineers to redesign usage of commercial and service variables, offsetting costs by $2 Million.
+- Consulted professionals with interactive visualizations, financial data, and predicted futures of the designated area.
+
+## Audio Producer & Engineer
+*Online platforms × record labels · DAWs, JUCE, C++, DSP tooling · Interscope, other musicians & engineers*
+
+- Produced and engineered tracks, movies, videos, and foley enjoyed by over millions of listeners and communities.
+- Designed DSP and VST tools utilized by thousands, and hosted workshops for fellow aspiring audio engineers.
+- Related repo: [[ssampler]]` },
 
   education: { id:'education', title:'Education', folder:'Résumé', tags:['penn-state','data-science'],
-    props:[['cap','school','The Pennsylvania State University'],['clock','graduating','May 2028'],['star','GPA','3.32 / 4.00']],
-    md:`## The Pennsylvania State University
-*College of Engineering · University Park, PA · May 2028*
+    props:[['cap','school','Pennsylvania State University'],['clock','graduating','May 2028'],['star','GPA','3.82 / 4.00']],
+    md:`## Pennsylvania State University
+*University Park, PA · May 2028*
 
-**B.E. Computational Data Science**
+**B.S. Computational Data Science**
 Minors in Economics and Artificial Intelligence
 
-### Organizations
+GPA: 3.82 / 4.00` },
 
-- IEEE
-- Engineering Leadership Society
-- HackPSU
-- CareerPREP
-- PSMusicGroup
-
-### Related coursework
-
-- Discrete Math
-- Object-Oriented Programming
-- Data Organization
-- Introduction to R` },
-
-  skills: { id:'skills', title:'Skills', folder:'Résumé', tags:['python','c++','rust','javascript','r','pytorch','docker','azure'],
+  skills: { id:'skills', title:'Skills', folder:'Résumé', tags:['python','sql','r','c++','javascript','azure','powerbi','pytorch','keras','pandas'],
     props:[],
     md:`## Tools
 
-Python · C++ · R · MySQL · Rust · JavaScript · Microsoft Azure · MongoDB · Docker · Kubernetes
+Python · SQL · R · C++ · JavaScript · Azure · PowerBI · Fabric · PyTorch · Keras · Pandas
 
-## ML / GenAI
+## Certification
 
-PyTorch · Keras · Pandas · NumPy · LLM inference workflows · semantic embeddings
+Six Sigma Green Belt
 
-## Certifications
+## Also used across my work
 
-- AZ-900 (Azure Fundamentals)
-- DP-900 (Azure Data Fundamentals)
-- Six Sigma Green Belt` },
+MySQL · PostgreSQL · Prisma · React · Docker · SciPy · MatPlotLib · CUDA · FFT libraries · Assembly · I2S & DMA · JUCE · DAWs · AutoCAD` },
 
   contact: { id:'contact', title:'Contact', folder:'', tags:[],
     props:[],
     md:`Open to internships, collaborations, and anything at the intersection of audio and software.
 
 - **Email** — [kunalghosh2005@gmail.com](mailto:kunalghosh2005@gmail.com)
-- **Phone** — [+1 (717)-719-7810](tel:+17177197810)
+- **Phone** — [(717)-719-7810](tel:+17177197810)
 - **LinkedIn** — [linkedin.com/in/vllknny](https://linkedin.com/in/vllknny)
-- **GitHub** — [github.com/vllknny](https://github.com/vllknny)` }
+- **GitHub** — [github.com/vllknny](https://github.com/vllknny)
+- **Site** — [vllknny.github.io](https://vllknny.github.io/)` }
 };
-const STATIC_ORDER = ['home','experience','education','skills','contact'];
+const STATIC_ORDER = ['home','experience','research','honors','education','skills','contact'];
 
 /* ════════════════════════════════════════════════════════════
    STATE
@@ -732,7 +750,7 @@ function renderTree() {
   const repos = pinned();
   $('#tree').innerHTML =
     file('home', 'Home', 'home') +
-    folder('Résumé', ['experience', 'education', 'skills'].map(k => file(k, NOTES[k].title)).join('')) +
+    folder('Résumé', ['experience', 'research', 'honors', 'education', 'skills'].map(k => file(k, NOTES[k].title)).join('')) +
     folder('Projects', repos.length ? repos.map(r => file('repo/' + r, r)).join('') : '<div class="empty-row">No repos selected</div>') +
     file('contact', 'Contact');
   $('#vaultinfo').textContent = `${allNotes().length} notes`;
@@ -780,6 +798,7 @@ function renderStatus() {
   el.textContent = `${bl} backlink${bl === 1 ? '' : 's'}   ${words.toLocaleString()} words   ${txt.length.toLocaleString()} characters`;
 }
 
+const jumpTop = sc => { sc.style.scrollBehavior = 'auto'; sc.scrollTop = 0; sc.style.scrollBehavior = ''; };   // new notes open instantly, no long smooth scroll up
 async function go(id) {
   current = id; stopGraph(); stopGraph = () => {};
   if (!tabs.includes(id)) tabs.push(id);
@@ -795,10 +814,10 @@ async function go(id) {
     outline = []; renderRight(); renderStatus(); stopGraph = drawGraph($('#graphwrap canvas')); return;
   }
   const isRepo = id.startsWith('repo/');
-  if (isRepo) { sc.innerHTML = `<article class="note"><h1 class="inline-title">${esc(id.slice(5))}</h1>${skeleton}</article>`; sc.scrollTop = 0; }
+  if (isRepo) { sc.innerHTML = `<article class="note"><h1 class="inline-title">${esc(id.slice(5))}</h1>${skeleton}</article>`; jumpTop(sc); }
   const res = await buildPage(id);
   if (token !== renderToken) return;
-  sc.innerHTML = res.html; sc.scrollTop = 0;
+  sc.innerHTML = res.html; jumpTop(sc);
   const md = $('.md', sc);
   outline = md ? enhance(md, res.ctx) : [];
   if (res.slots) { const s = $('[data-slot=projects]', sc); if (s) s.outerHTML = projectSlot(); }
